@@ -1,3 +1,4 @@
+import 'package:Journey/Login.dart';
 import 'package:flutter/material.dart';
 
 class SingUpScreen extends StatefulWidget {
@@ -20,7 +21,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 0),
+            padding: const EdgeInsets.only(top: 100),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 50),
@@ -31,7 +32,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
                 const Text(
                   'Sign up',
                   style: TextStyle(
-                    color: Color(0xFF755DC1),
+                    color: Color.fromARGB(255, 150, 122, 161),
                     fontSize: 27,
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w500,
@@ -54,7 +55,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
                     decoration: const InputDecoration(
                       labelText: 'Email',
                       labelStyle: TextStyle(
-                        color: Color(0xFF755DC1),
+                        color:Color.fromARGB(255, 150, 122, 161),
                         fontSize: 15,
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w600,
@@ -70,20 +71,20 @@ class _SingUpScreenState extends State<SingUpScreen> {
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                         borderSide: BorderSide(
                           width: 1,
-                          color: Color(0xFF9F7BFF),
+                          color: Color.fromARGB(255, 150, 122, 161),
                         ),
                       ),
                     ),
                   ),
                 ),
                 const SizedBox(
-                  height: 17,
+                  height: 20,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(
-                      width: 147,
+                      width: 140,
                       height: 56,
                       child: TextField(
                         controller: _passController,
@@ -104,7 +105,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
                             fontWeight: FontWeight.w400,
                           ),
                           labelStyle: TextStyle(
-                            color: Color(0xFF755DC1),
+                            color: Color.fromARGB(255, 150, 122, 161),
                             fontSize: 15,
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w600,
@@ -120,14 +121,14 @@ class _SingUpScreenState extends State<SingUpScreen> {
                             borderRadius: BorderRadius.all(Radius.circular(10)),
                             borderSide: BorderSide(
                               width: 1,
-                              color: Color(0xFF9F7BFF),
+                              color: Color.fromARGB(255, 150, 122, 161),
                             ),
                           ),
                         ),
                       ),
                     ),
                     SizedBox(
-                      width: 147,
+                      width: 140,
                       height: 56,
                       child: TextField(
                         controller: _repassController,
@@ -148,7 +149,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
                             fontWeight: FontWeight.w400,
                           ),
                           labelStyle: TextStyle(
-                            color: Color(0xFF755DC1),
+                            color: Color.fromARGB(255, 150, 122, 161),
                             fontSize: 15,
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w600,
@@ -164,7 +165,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
                             borderRadius: BorderRadius.all(Radius.circular(10)),
                             borderSide: BorderSide(
                               width: 1,
-                              color: Color(0xFF9F7BFF),
+                              color: Color.fromARGB(255, 150, 122, 161),
                             ),
                           ),
                         ),
@@ -187,7 +188,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
                             curve: Curves.ease);
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF9F7BFF),
+                        backgroundColor: const Color.fromARGB(255, 150, 122, 161),
                       ),
                       child: const Text(
                         'Create account',
@@ -219,21 +220,29 @@ class _SingUpScreenState extends State<SingUpScreen> {
                     const SizedBox(
                       width: 2.5,
                     ),
-                    InkWell(
-                      onTap: () {
-                        widget.controller.animateToPage(0,
-                            duration: const Duration(milliseconds: 500),
-                            curve: Curves.ease);
+                    TextButton(
+                      onPressed: () {
+                        PageController controllerInstance = PageController();
+
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (BuildContext context) {
+                              return LoginScreen(
+                                  controller:
+                                      controllerInstance); // Pass the controller instance
+                            },
+                          ),
+                        );
                       },
-                      child: const Text(
-                        'Log In ',
-                        style: TextStyle(
-                          color: Color(0xFF755DC1),
+                      style: TextButton.styleFrom(
+                        primary: Color.fromARGB(255, 150, 122, 161),
+                        textStyle: const TextStyle(
                           fontSize: 13,
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w500,
                         ),
                       ),
+                      child: const Text('Login'),
                     ),
                   ],
                 ),
