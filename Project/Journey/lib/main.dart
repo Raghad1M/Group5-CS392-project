@@ -1,6 +1,8 @@
 import 'package:Journey/Login.dart';
 import 'package:flutter/material.dart';
 
+import 'user_profile.dart';
+
 void main() {
   runApp(const MyApp());
 }
