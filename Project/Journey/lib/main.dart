@@ -2,8 +2,6 @@ import 'package:Journey/Login.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'user_profile.dart';
-import 'package:Journey/Login.dart';
 import 'package:Journey/homepage.dart';
 
 void main() async {
@@ -21,7 +19,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/firstPage',
       routes: {
         '/firstPage': (context) => FirstPage(),
-        '/loginPage': (context) => LoginScreen(controller: PageController(),),
+        '/LoginScreen': (context) => LoginScreen(controller: PageController(),),
         '/homePage': (context) => HomePage(),
       },
     );

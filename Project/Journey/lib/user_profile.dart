@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -11,6 +12,11 @@ class _ProfilePageState extends State<ProfilePage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
+  
+void _handleLogout() async {
+  await FirebaseAuth.instance.signOut();
+  Navigator.pushReplacementNamed(context, '/firstPage');
+}
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +25,12 @@ class _ProfilePageState extends State<ProfilePage> {
         title: const Text('My Account'),
         automaticallyImplyLeading: false, 
         backgroundColor: Color.fromARGB(255, 150, 122, 161),
+         actions: [
+          IconButton(
+            icon: Icon(Icons.logout), // Icon for logout
+            onPressed: _handleLogout, // Calls the logout function
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
