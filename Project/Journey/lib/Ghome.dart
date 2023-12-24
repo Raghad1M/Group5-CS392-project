@@ -1,3 +1,4 @@
+import 'package:Journey/Login.dart';
 import 'package:Journey/favpage.dart';
 import 'package:Journey/user_profile.dart';
 import 'package:flutter/material.dart';
@@ -14,14 +15,15 @@ class Course {
   });
 }
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class Guesthome extends StatefulWidget {
+  const Guesthome({Key? key, required PageController controller})
+      : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _Guesthome createState() => _Guesthome();
 }
 
-class _HomePageState extends State<HomePage> {
+class _Guesthome extends State<Guesthome> {
   int _currentIndex = 0;
 
   List<Course> courses = [
@@ -77,9 +79,9 @@ class _HomePageState extends State<HomePage> {
       case 0:
         return _buildHomePage();
       case 1:
-        return FavoritePage();
+        return pop();
       case 2:
-        return ProfilePage();
+        return pop();
       default:
         return SizedBox(); // Return an empty container for unhandled cases
     }
@@ -89,7 +91,8 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Home page'),
-        automaticallyImplyLeading: false, 
+        foregroundColor: const Color.fromARGB(255, 245, 230, 232),
+        automaticallyImplyLeading: false,
         backgroundColor: Color.fromARGB(255, 150, 122, 161),
       ),
       body: Column(
@@ -181,6 +184,55 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class pop extends StatelessWidget {
+  const pop({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+          child: Column(
+        children: [
+          SizedBox( 
+            height: 400, 
+          ),
+          Text(' YOU HAVE TO LOGIN OR SIGN UP!',style: TextStyle( 
+                    fontSize: 23, 
+                    fontFamily: 'Poppins', 
+                    fontWeight: FontWeight.w500, 
+                  ),), 
+                    SizedBox( 
+            height: 30, 
+          ),
+          ElevatedButton(
+            onPressed: () {
+              PageController controllerInstance = PageController();
+
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (BuildContext context) {
+                    return LoginScreen(
+                        controller:
+                            controllerInstance); 
+                  },
+                ),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color.fromARGB(255, 150, 122, 161),
+              foregroundColor: const Color.fromARGB(255, 245, 230, 232),
+
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 130, vertical: 15), 
+            ),
+            child: const Text('Sign in'),
+          ),
+        ],
+      )),
     );
   }
 }
