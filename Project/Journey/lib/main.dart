@@ -1,24 +1,33 @@
 import 'package:Journey/Login.dart';
 import 'package:flutter/material.dart';
-
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'user_profile.dart';
+import 'package:Journey/Login.dart';
+import 'package:Journey/homepage.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  runApp(MyApp());
 }
-
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: FirstPage(),
+      initialRoute: '/firstPage',
+      routes: {
+        '/firstPage': (context) => FirstPage(),
+        '/loginPage': (context) => LoginScreen(controller: PageController(),),
+        '/homePage': (context) => HomePage(),
+      },
     );
   }
 }
+
 
 class FirstPage extends StatelessWidget {
   const FirstPage({Key? key}) : super(key: key);
@@ -35,8 +44,8 @@ class FirstPage extends StatelessWidget {
             children: [
               Image.asset(
                 'images/FirstPage.png',
-                height: 380,
-                width: 300,
+                height: 400,
+                width: 280,
               ),
               Expanded(
                 child: Padding(
@@ -49,7 +58,7 @@ class FirstPage extends StatelessWidget {
                         style: TextStyle(
                             fontSize: 30, fontStyle: FontStyle.italic),
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 15),
                       const Text(
                         'Ready to embark on a Journey for inspiration and knowledge? Your adventure begins now. Let\'s go!',
                         textAlign: TextAlign.center,
@@ -60,7 +69,7 @@ class FirstPage extends StatelessWidget {
                             ),
                       ),
                       const SizedBox(
-                          height: 50), // Add space between the text and button
+                          height: 90), // Add space between the text and button
                       ElevatedButton(
                         onPressed: () {},
                         style: ElevatedButton.styleFrom(

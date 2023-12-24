@@ -1,5 +1,7 @@
 import 'package:Journey/Login.dart';
+import 'package:Journey/homepage.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';  
 
 class SingUpScreen extends StatefulWidget {
   const SingUpScreen({super.key, required this.controller});
@@ -9,9 +11,55 @@ class SingUpScreen extends StatefulWidget {
 }
 
 class _SingUpScreenState extends State<SingUpScreen> {
+  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
   final TextEditingController _repassController = TextEditingController();
+
+Future<void> _createAccount() async {
+  try {
+    UserCredential userCredential = await FirebaseAuth.instance
+        .createUserWithEmailAndPassword(
+          email: _emailController.text,
+          password: _passController.text,
+        );
+
+    if (userCredential.user != null) {
+      // Registration successful, navigate to the home page
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (BuildContext context) => HomePage(),
+        ),
+      );
+    }
+  } on FirebaseAuthException catch (e) {
+    if (e.code == 'invalid-email') {
+      // Handle badly formatted email error
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('The email address is badly formatted.'),
+        ),
+      );
+    } else if (e.code == 'weak-password') {
+      // Handle weak password error
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('The password provided is too weak.'),
+        ),
+      );
+    } else if (e.code == 'email-already-in-use') {
+      // Handle email already in use error
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('The email address is already in use.'),
+        ),
+      );
+    }
+   
+  } catch (e) {
+    print('Error creating account: $e');
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +88,45 @@ class _SingUpScreenState extends State<SingUpScreen> {
                 ),
                 const SizedBox(
                   height: 40,
+                ),
+                   SizedBox(
+                  height: 56,
+                  child: TextField(
+                    controller: _nameController,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: Color(0xFF393939),
+                      fontSize: 13,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w400,
+                    ),
+                    decoration: const InputDecoration(
+                      labelText: 'name',
+                      labelStyle: TextStyle(
+                        color:Color.fromARGB(255, 150, 122, 161),
+                        fontSize: 15,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w600,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        borderSide: BorderSide(
+                          width: 1,
+                          color: Color(0xFF837E93),
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        borderSide: BorderSide(
+                          width: 1,
+                          color: Color.fromARGB(255, 150, 122, 161),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                 const SizedBox(
+                  height:20,
                 ),
                 SizedBox(
                   height: 56,
@@ -89,6 +176,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
                       child: TextField(
                         controller: _passController,
                         textAlign: TextAlign.center,
+                        obscureText: true, 
                         style: const TextStyle(
                           color: Color(0xFF393939),
                           fontSize: 13,
@@ -133,6 +221,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
                       child: TextField(
                         controller: _repassController,
                         textAlign: TextAlign.center,
+                        obscureText: true, 
                         style: const TextStyle(
                           color: Color(0xFF393939),
                           fontSize: 13,
@@ -182,11 +271,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
                     width: 329,
                     height: 56,
                     child: ElevatedButton(
-                      onPressed: () {
-                        widget.controller.animateToPage(2,
-                            duration: const Duration(milliseconds: 500),
-                            curve: Curves.ease);
-                      },
+                      onPressed: _createAccount, // Call _createAccount() on button press
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromARGB(255, 150, 122, 161),
                       ),
@@ -208,7 +293,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
                 Row(
                   children: [
                     const Text(
-                      ' have an account?',
+                      ' Already have an account?',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Color(0xFF837E93),

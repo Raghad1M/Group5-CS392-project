@@ -1,30 +1,17 @@
+import 'package:Journey/favpage.dart';
+import 'package:Journey/user_profile.dart';
 import 'package:flutter/material.dart';
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Home page',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: HomePage(),
-    );
-  }
-}
 
 class Course {
   final String name;
   final String university;
   final String image;
 
-  Course({required this.name, required this.university, required this.image});
+  Course({
+    required this.name,
+    required this.university,
+    required this.image,
+  });
 }
 
 class HomePage extends StatefulWidget {
@@ -35,26 +22,28 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int _currentIndex = 0;
+
   List<Course> courses = [
     Course(
       name: 'Operating system',
-      university: 'الأمام محمد بن سعود',
-      image: 'assets/university_images/abc_university.png',
+      university: 'Imamu',
+      image: 'images/Ppic.png',
     ),
     Course(
       name: 'java 1',
-      university: 'الامام محمد بن سعود',
-      image: 'assets/university_images/xyz_university.png',
+      university: 'Imamu',
+      image: 'images/Ppic.png',
     ),
     Course(
       name: 'Database',
-      university: ' الامام محمد بن سعود',
-      image: 'assets/Screenshot 2023-12-22 220732.png',
+      university: 'Imamu',
+      image: 'images/Ppic.png',
     ),
     Course(
       name: 'Software engineering',
-      university: ' الامام محمد بن سعود',
-      image: 'assets/university_images/pqr_university.png',
+      university: 'Imamu',
+      image: 'images/Ppic.png',
     ),
   ];
   List<Course> filteredCourses = [];
@@ -83,11 +72,25 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildBody(int index) {
+    switch (index) {
+      case 0:
+        return _buildHomePage();
+      case 1:
+        return FavoritePage();
+      case 2:
+        return ProfilePage();
+      default:
+        return SizedBox(); // Return an empty container for unhandled cases
+    }
+  }
+
+  Widget _buildHomePage() {
     return Scaffold(
       appBar: AppBar(
         title: Text('Home page'),
+        automaticallyImplyLeading: false, 
+        backgroundColor: Color.fromARGB(255, 150, 122, 161),
       ),
       body: Column(
         children: [
@@ -97,7 +100,7 @@ class _HomePageState extends State<HomePage> {
               controller: searchController,
               onChanged: filterCourses,
               decoration: InputDecoration(
-                labelText: 'ابحث عن المادة',
+                labelText: 'Search for courses',
                 prefixIcon: Icon(Icons.search),
               ),
             ),
@@ -117,8 +120,7 @@ class _HomePageState extends State<HomePage> {
                         filteredCourses[index].name,
                         style: TextStyle(
                           fontSize: 18,
-                          fontFamily:
-                              'YourCustomFont', // Replace with your desired font family
+                          fontFamily: 'Poppins',
                         ),
                       ),
                       SizedBox(height: 8),
@@ -132,8 +134,8 @@ class _HomePageState extends State<HomePage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
-                            Icons.school,
-                            color: Colors.purple,
+                            Icons.school_rounded,
+                            color: Color.fromARGB(255, 150, 122, 161),
                           ),
                           SizedBox(width: 4),
                           Text(
@@ -147,6 +149,35 @@ class _HomePageState extends State<HomePage> {
                 );
               },
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: _buildBody(_currentIndex),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: (int index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite),
+            label: 'Favorites',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
           ),
         ],
       ),
