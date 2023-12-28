@@ -35,10 +35,29 @@ Future<void> _createAccount() async {
       );
     }
   } on FirebaseAuthException catch (e) {
-    // Handle FirebaseAuthException
-    // ...
+    String errorMessage = 'Error signing in';
+
+    if (e.code == 'invalid-email') {
+      errorMessage = 'Invalid email format';
+    } else if (e.code == 'user-not-found') {
+      errorMessage = 'No user found with this email';
+    } else if (e.code == 'invalid-credential') {
+      errorMessage = 'Invalid email or password'; 
+    } else if (e.code == 'wrong-password') {
+      errorMessage = 'Invalid email or password';
+    } else {
+      errorMessage = 'Something went wrong';
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(errorMessage),
+        duration: Duration(seconds: 3),
+      ),
+    );
+
   } catch (e) {
-    print('Error creating account: $e');
+    print('Error signing in: $e');
   }
 }
 
