@@ -1,4 +1,8 @@
+import 'package:Journey/java1.dart';
+import 'package:Journey/videos.dart';
 import 'package:flutter/material.dart'; 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
  
 class CourseContentScreen extends StatelessWidget { 
   const CourseContentScreen({Key? key}) : super(key: key); 
@@ -39,51 +43,130 @@ class CourseContentScreen extends StatelessWidget {
       ), 
     ); 
   } 
- 
-  Widget _buildBox(BuildContext context, String title, Color color) { 
-  double boxWidth = MediaQuery.of(context).size.width / 2.5; 
-   
-  return Container( 
-    width: boxWidth, 
-    height: boxWidth, 
-    decoration: BoxDecoration( 
-      color: color, 
-      borderRadius: BorderRadius.circular(8), 
-      boxShadow: [ 
-        BoxShadow( 
-          color: Colors.grey.withOpacity(0.5), 
-          spreadRadius: 3, 
-          blurRadius: 7, 
-          offset: const Offset(0, 3), 
-        ), 
-      ], 
-    ), 
-    child: Column( 
-      mainAxisAlignment: MainAxisAlignment.center, 
-      children: [ 
-        Text( 
-          title, 
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white), 
-        ), 
-        const SizedBox(height: 8), 
-        ElevatedButton( 
-          onPressed: () { 
-            // Handle button click 
-            print("$title button clicked!"); 
-          }, 
-          style: ElevatedButton.styleFrom( 
-            backgroundColor: Colors.white, 
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6), 
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)), 
-          ), 
-          child: Text( 
-            "Click", 
-            style: TextStyle(fontSize: 14, color: color), 
-          ), 
-        ), 
-      ], 
-    ), 
-  ); 
-} 
- 
+ Widget _buildBox(BuildContext context, String title, Color color) {
+  double boxWidth = MediaQuery.of(context).size.width / 2.5;
+
+  Widget screenToNavigate;
+
+  switch (title) {
+    case "Videos":
+      screenToNavigate = VideosScreen();
+      break;
+    case "Quizzes":
+      screenToNavigate = QuizzesScreen();
+      break;
+    case "Articles":
+      screenToNavigate = ArticlesScreen();
+      break;
+    case "Assignments":
+      screenToNavigate = AssignmentsScreen();
+      break;
+    default:
+      screenToNavigate = Container();
+  }
+
+  return GestureDetector(
+    onTap: () {
+      if (screenToNavigate != Container()) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => screenToNavigate),
+        );
+      }
+    },
+    child: Container(
+      width: boxWidth,
+      height: boxWidth,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 3,
+            blurRadius: 7,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+          ),
+          const SizedBox(height: 8),
+          ElevatedButton(
+            onPressed: () {
+              if (screenToNavigate != Container()) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => screenToNavigate),
+                );
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            ),
+            child: Text(
+              "Click",
+              style: TextStyle(fontSize: 14, color: color),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+
+
+
+}
+
+class QuizzesScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Quizzes"),
+      ),
+      body: Center(
+        child: Text("Quizzes Screen"),
+      ),
+    );
+  }
+
+}
+class ArticlesScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Articles"),
+      ),
+      body: Center(
+        child: Text("Articles Screen"),
+      ),
+    );
+  }
+
+}
+
+class AssignmentsScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Assignments"),
+      ),
+      body: Center(
+        child: Text("Assignments Screen"),
+      ),
+    );
+  }
+
 }

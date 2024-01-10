@@ -4,13 +4,18 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:Journey/homepage.dart';
 import 'package:Journey/Ghome.dart';
-
+import 'package:Journey/java1.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(MyApp());
+  try {
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+    runApp(const MyApp());
+  } catch (e) {
+    print('Error initializing Firebase: $e');
+  }
 }
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key});
 
@@ -18,10 +23,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primaryColor: const Color.fromARGB(255, 150, 122, 161), // Set your primary color here
+        // Other theme configurations...
+      ),
       initialRoute: '/firstPage',
       routes: {
         '/firstPage': (context) => FirstPage(),
-        '/LoginScreen': (context) => LoginScreen(controller: PageController(),),
+        '/LoginScreen': (context) => LoginScreen(controller: PageController()),
         '/homePage': (context) => HomePage(),
       },
     );
@@ -121,7 +130,7 @@ class FirstPage extends StatelessWidget {
                         ),
                         child: const Text('Sign in'),
                       ),
-                      
+                             
                     ],
                   ),
                 ),
