@@ -15,7 +15,6 @@ class _SingUpScreenState extends State<SingUpScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
   final TextEditingController _repassController = TextEditingController();
-
 Future<void> _createAccount() async {
   try {
     UserCredential userCredential = await FirebaseAuth.instance
@@ -25,6 +24,9 @@ Future<void> _createAccount() async {
         );
 
     if (userCredential.user != null) {
+      // Set display name
+      await userCredential.user!.updateProfile(displayName: _nameController.text);
+      
       // Registration successful, navigate to the home page
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
@@ -33,33 +35,32 @@ Future<void> _createAccount() async {
       );
     }
   } on FirebaseAuthException catch (e) {
+    String errorMessage = 'Error signing in';
+
     if (e.code == 'invalid-email') {
-      // Handle badly formatted email error
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('The email address is badly formatted.'),
-        ),
-      );
-    } else if (e.code == 'weak-password') {
-      // Handle weak password error
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('The password provided is too weak.'),
-        ),
-      );
-    } else if (e.code == 'email-already-in-use') {
-      // Handle email already in use error
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('The email address is already in use.'),
-        ),
-      );
+      errorMessage = 'Invalid email format';
+    } else if (e.code == 'user-not-found') {
+      errorMessage = 'No user found with this email';
+    } else if (e.code == 'invalid-credential') {
+      errorMessage = 'Invalid email or password'; 
+    } else if (e.code == 'wrong-password') {
+      errorMessage = 'Invalid email or password';
+    } else {
+      errorMessage = 'Something went wrong';
     }
-   
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(errorMessage),
+        duration: Duration(seconds: 3),
+      ),
+    );
+
   } catch (e) {
-    print('Error creating account: $e');
+    print('Error signing in: $e');
   }
 }
+
 
   @override
   Widget build(BuildContext context) {

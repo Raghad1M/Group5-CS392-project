@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:Journey/homepage.dart';
+import 'package:Journey/Ghome.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -69,10 +71,24 @@ class FirstPage extends StatelessWidget {
                       const SizedBox(
                           height: 90), // Add space between the text and button
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          PageController controllerInstance = PageController();
+
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (BuildContext context) {
+                                return Guesthome(
+                                    controller:
+                                        controllerInstance); // Pass the controller instance
+                              },
+                            ),
+                          );
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor:
                               const Color.fromARGB(255, 150, 122, 161),
+                          foregroundColor:
+                              const Color.fromARGB(255, 245, 230, 232),
                           padding: const EdgeInsets.symmetric(
                               horizontal: 100,
                               vertical: 15), // Adjust button padding
@@ -105,9 +121,12 @@ class FirstPage extends StatelessWidget {
                         ),
                         child: const Text('Sign in'),
                       ),
+                      
                     ],
                   ),
                 ),
+             
+  
               ),
             ],
           ),
