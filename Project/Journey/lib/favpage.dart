@@ -1,3 +1,4 @@
+import 'package:Journey/NotificationPage.dart';
 import 'package:flutter/material.dart';
 class FavoritePage extends StatefulWidget {
   @override
@@ -70,7 +71,12 @@ class _FavoritePageState extends State<FavoritePage> with SingleTickerProviderSt
           IconButton(
             icon: Icon(Icons.notifications),
             onPressed: () {
-              // Add your notification logic here
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => NotificationPage(),
+                ),
+              );
             },
           ),
         ],
