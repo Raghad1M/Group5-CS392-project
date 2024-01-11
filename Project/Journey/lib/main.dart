@@ -4,7 +4,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:Journey/homepage.dart';
 import 'package:Journey/Ghome.dart';
-import 'package:Journey/java1.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

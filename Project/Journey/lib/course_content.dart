@@ -1,5 +1,5 @@
-import 'package:Journey/java1.dart';
-import 'package:Journey/videos.dart';
+import 'package:Journey/videoplayer.dart';
+import 'package:Journey/sentimentanalysis.dart';
 import 'package:flutter/material.dart'; 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -50,7 +50,7 @@ class CourseContentScreen extends StatelessWidget {
 
   switch (title) {
     case "Videos":
-      screenToNavigate = VideosScreen();
+      screenToNavigate =  VideoListScreen();
       break;
     case "Quizzes":
       screenToNavigate = QuizzesScreen();
