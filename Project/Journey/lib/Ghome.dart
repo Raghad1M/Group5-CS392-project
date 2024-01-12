@@ -182,6 +182,10 @@ class _Guesthome extends State<Guesthome> {
             icon: Icon(Icons.person),
             label: 'Profile',
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.chat),
+            label: 'chat',
+          ),
         ],
       ),
     );

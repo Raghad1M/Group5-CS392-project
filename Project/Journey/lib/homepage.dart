@@ -3,6 +3,8 @@ import 'package:Journey/disscusionBoard.dart';
 import 'package:Journey/favpage.dart';
 import 'package:Journey/user_profile.dart';
 import 'package:flutter/material.dart';
+import 'package:Journey/NotificationPage.dart';
+
 
 class Course {
   final String name;
@@ -21,11 +23,12 @@ class HomePage extends StatefulWidget {
 
   @override
   _HomePageState createState() => _HomePageState();
+  
 }
 
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
-
+  
   List<Course> courses = [
     Course(
       name: 'Operating system',
@@ -95,6 +98,20 @@ Widget _buildBody(int index) {
         title: Text('Home page'),
         automaticallyImplyLeading: false, 
         backgroundColor: Color.fromARGB(255, 150, 122, 161),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.notifications),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => NotificationPage(),
+                ),
+              );
+            },
+          ),
+        ],
+
       ),
       body: Column(
         children: [
