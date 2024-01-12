@@ -7,6 +7,7 @@ class ProfilePage extends StatefulWidget {
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
+
 class _ProfilePageState extends State<ProfilePage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -59,10 +60,11 @@ class _ProfilePageState extends State<ProfilePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const SizedBox(height: 10.0),
-            const CircleAvatar(
+            CircleAvatar(
               radius: 50.0,
-              backgroundImage: AssetImage('images/Ppic.png'),
+              backgroundImage: AssetImage('images/Ppic.png'), // Replace with your image path
             ),
+            const SizedBox(height: 20.0),
             const SizedBox(height: 20.0),
             _buildEditableField(
               controller: _nameController,
@@ -81,16 +83,15 @@ class _ProfilePageState extends State<ProfilePage> {
             ],
             if (!_isEditing)
               ElevatedButton(
-                              
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 150, 122, 161), // Set button color
-                    padding: EdgeInsets.symmetric(horizontal:100, vertical: 15), // Adjust button padding
-                  ),
                 onPressed: () {
                   setState(() {
                     _isEditing = true;
                   });
                 },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color.fromARGB(255, 150, 122, 161),
+                  padding: EdgeInsets.symmetric(horizontal: 100, vertical: 15),
+                ),
                 child: const Text('Edit information'),
               ),
           ],
@@ -108,7 +109,6 @@ class _ProfilePageState extends State<ProfilePage> {
       controller: controller,
       obscureText: obscureText,
       decoration: InputDecoration(
-        
         labelText: label,
         enabled: _isEditing,
       ),
@@ -137,36 +137,37 @@ class _ProfilePageState extends State<ProfilePage> {
       ],
     );
   }
-Widget _buildSaveButton() {
-  return ElevatedButton(
-    onPressed: () async {
-      User? user = _auth.currentUser;
-      if (user != null) {
-        try {
-          await user.updateDisplayName(_nameController.text);
-          await user.updateEmail(_emailController.text);
-          // Update password if provided
-          if (_newPasswordController.text.isNotEmpty) {
-            await user.updatePassword(_newPasswordController.text);
+
+  Widget _buildSaveButton() {
+    return ElevatedButton(
+      onPressed: () async {
+        User? user = _auth.currentUser;
+        if (user != null) {
+          try {
+            await user.updateDisplayName(_nameController.text);
+            await user.updateEmail(_emailController.text);
+            // Update password if provided
+            if (_newPasswordController.text.isNotEmpty) {
+              await user.updatePassword(_newPasswordController.text);
+            }
+            setState(() {
+              _isEditing = false;
+            });
+          } catch (e) {
+            print('Error updating user: $e');
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Error updating user: $e')),
+            );
           }
-          setState(() {
-            _isEditing = false;
-          });
-        } catch (e) {
-          print('Error updating user: $e');
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error updating user: $e')),
-          );
         }
-      }
-    },
-    style: ElevatedButton.styleFrom(
-      backgroundColor: Color.fromARGB(255, 150, 122, 161), // Set button color
-      padding: EdgeInsets.symmetric(horizontal: 100, vertical: 15), // Adjust button padding
-    ),
-    child: Text('Save Changes'),
-  );
-}
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Color.fromARGB(255, 150, 122, 161),
+        padding: EdgeInsets.symmetric(horizontal: 100, vertical: 15),
+      ),
+      child: Text('Save Changes'),
+    );
+  }
 
   void _handleLogout() async {
     try {
