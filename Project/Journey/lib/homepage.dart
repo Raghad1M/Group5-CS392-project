@@ -1,3 +1,5 @@
+import 'package:Journey/course_content.dart';
+import 'package:Journey/disscusionBoard.dart';
 import 'package:Journey/favpage.dart';
 import 'package:Journey/user_profile.dart';
 import 'package:flutter/material.dart';
@@ -74,19 +76,21 @@ class _HomePageState extends State<HomePage> {
       filteredCourses = filteredList;
     });
   }
-
-  Widget _buildBody(int index) {
-    switch (index) {
-      case 0:
-        return _buildHomePage();
-      case 1:
-        return FavoritePage();
-      case 2:
-        return ProfilePage();
-      default:
-        return SizedBox(); // Return an empty container for unhandled cases
-    }
+Widget _buildBody(int index) {
+  switch (index) {
+    case 0:
+      return _buildHomePage();
+    case 1:
+      return FavoritePage();
+    case 2:
+      return ProfilePage();
+    case 3:
+      return ForumScreen(); // Add case for MessagesPage
+    default:
+      return SizedBox();
   }
+}
+
 
   Widget _buildHomePage() {
     return Scaffold(
@@ -123,81 +127,116 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           Expanded(
-            child: GridView.builder(
-              itemCount: filteredCourses.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
+            child:
+             GridView.builder(
+  itemCount: filteredCourses.length,
+  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+    crossAxisCount: 2,
+  ),
+  itemBuilder: (context, index) {
+    return GestureDetector(
+      onTap: () {
+        // Navigate to different screens based on the selected course
+        switch (filteredCourses[index].name) {
+          case 'Operating system':
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => CourseContentScreen()),
+            );
+            break;
+          case 'Java 1':
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => CourseContentScreen()),
+            );
+            break;
+          // Add cases for other courses as needed
+          default:
+            // Handle cases not specified above
+        }
+      },
+      child: Card(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              filteredCourses[index].name,
+              style: TextStyle(
+                fontSize: 18,
+                fontFamily: 'Poppins',
               ),
-              itemBuilder: (context, index) {
-                return Card(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        filteredCourses[index].name,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontFamily: 'Poppins',
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      Image.asset(
-                        filteredCourses[index].image,
-                        width: 80,
-                        height: 80,
-                      ),
-                      SizedBox(height: 8),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.school_rounded,
-                            color: Color.fromARGB(255, 150, 122, 161),
-                          ),
-                          SizedBox(width: 4),
-                          Text(
-                            filteredCourses[index].university,
-                            style: TextStyle(fontSize: 16),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                );
-              },
             ),
-          ),
-        ],
+            SizedBox(height: 8),
+            Image.asset(
+              filteredCourses[index].image,
+              width: 80,
+              height: 80,
+            ),
+            SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.school_rounded,
+                  color: Color.fromARGB(255, 150, 122, 161),
+                ),
+                SizedBox(width: 4),
+                Text(
+                  filteredCourses[index].university,
+                  style: TextStyle(fontSize: 16),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
-  }
+  },
+),
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: _buildBody(_currentIndex),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (int index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: 'Favorites',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
           ),
         ],
       ),
     );
   }
+  
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    body: _buildBody(_currentIndex),
+    bottomNavigationBar: Theme(
+        data: Theme.of(context).copyWith(
+          canvasColor: Color.fromARGB(255, 150, 122, 161), // Set the color here
+        ),
+        child: BottomNavigationBar(
+  currentIndex: _currentIndex,
+  onTap: (int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  },
+  backgroundColor: Color.fromARGB(255, 150, 122, 161),
+  items: const [
+    BottomNavigationBarItem(
+      icon: Icon(Icons.home),
+      label: 'Home',
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.favorite),
+      label: 'Favorites',
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.person),
+      label: 'Profile',
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.message),
+      label: 'Messages',
+    ),
+  ],
+),
+    )
+  );
+}
+
 }

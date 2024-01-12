@@ -2,6 +2,8 @@ import 'package:Journey/Login.dart';
 import 'package:Journey/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';  
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 class SingUpScreen extends StatefulWidget {
   const SingUpScreen({super.key, required this.controller});
@@ -17,16 +19,22 @@ class _SingUpScreenState extends State<SingUpScreen> {
   final TextEditingController _repassController = TextEditingController();
 Future<void> _createAccount() async {
   try {
-    UserCredential userCredential = await FirebaseAuth.instance
-        .createUserWithEmailAndPassword(
-          email: _emailController.text,
-          password: _passController.text,
-        );
+    UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      email: _emailController.text,
+      password: _passController.text,
+    );
 
     if (userCredential.user != null) {
       // Set display name
       await userCredential.user!.updateProfile(displayName: _nameController.text);
-      
+
+      // Store additional user data in Firestore 'users' collection
+      await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).set({
+        'name': _nameController.text,
+        'email': _emailController.text,
+        // Add more fields as needed for user data
+      });
+
       // Registration successful, navigate to the home page
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
@@ -34,11 +42,8 @@ Future<void> _createAccount() async {
         ),
       );
     }
-  } on FirebaseAuthException catch (e) {
-    // Handle FirebaseAuthException
-    // ...
   } catch (e) {
-    print('Error creating account: $e');
+    print('Error signing in: $e');
   }
 }
 
