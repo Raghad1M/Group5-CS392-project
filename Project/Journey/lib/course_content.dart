@@ -1,8 +1,11 @@
+import 'package:Journey/assigmentPage.dart';
 import 'package:Journey/videoplayer.dart';
 import 'package:Journey/sentimentanalysis.dart';
 import 'package:flutter/material.dart'; 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:Journey/QuizApp.dart';
+import 'javaart.dart'; // Import the javaart.dart file
+import 'assigmentPage.dart';
 
  
 class CourseContentScreen extends StatelessWidget { 
@@ -56,12 +59,15 @@ class CourseContentScreen extends StatelessWidget {
     case "Quizzes":
       screenToNavigate = QuizPage();
       break;
-    case "Articles":
-      screenToNavigate = ArticlesScreen();
-      break;
-    case "Assignments":
-      screenToNavigate = AssignmentsScreen();
-      break;
+   case "Articles":
+  screenToNavigate = ArticlesScreen (); 
+
+   case "Assignments":
+  List<String> actualPdfFiles = ["Tutorials.pdf", "Tutotials2.pdf"];
+  screenToNavigate = AssignmentsScreen(pdfFiles: actualPdfFiles);
+  break;
+
+
     default:
       screenToNavigate = Container();
   }
@@ -135,32 +141,58 @@ class CourseContentScreen extends StatelessWidget {
 //     );
 //   }
 // }
-class ArticlesScreen extends StatelessWidget {
+
+class ArticlesScreen extends StatelessWidget { 
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Articles"),
-      ),
+      
+     
       body: Center(
-        child: Text("Articles Screen"),
+       child: ArticleList(),
       ),
+      
     );
   }
+  
 
 }
 
+
+
+
+
+
+
+
 class AssignmentsScreen extends StatelessWidget {
+  final List<String> pdfFiles; // Actual list of PDF file paths
+
+  AssignmentsScreen({required this.pdfFiles});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Assignments"),
+         backgroundColor: Color.fromARGB(255, 150, 122, 161), 
       ),
       body: Center(
-        child: Text("Assignments Screen"),
+        child: AssignmentPage(pdfFiles: pdfFiles),
       ),
     );
   }
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
