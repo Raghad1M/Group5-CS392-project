@@ -83,7 +83,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ElevatedButton(
                               
                   style: ElevatedButton.styleFrom(
-                    primary: Color.fromARGB(255, 150, 122, 161), // Set button color
+                    backgroundColor: Color.fromARGB(255, 150, 122, 161), // Set button color
                     padding: EdgeInsets.symmetric(horizontal:100, vertical: 15), // Adjust button padding
                   ),
                 onPressed: () {
@@ -161,7 +161,7 @@ Widget _buildSaveButton() {
       }
     },
     style: ElevatedButton.styleFrom(
-      primary: Color.fromARGB(255, 150, 122, 161), // Set button color
+      backgroundColor: Color.fromARGB(255, 150, 122, 161), // Set button color
       padding: EdgeInsets.symmetric(horizontal: 100, vertical: 15), // Adjust button padding
     ),
     child: Text('Save Changes'),
