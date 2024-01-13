@@ -10,7 +10,7 @@ class YoutubeApiExample extends StatefulWidget {
 }
 
 class _YoutubeApiExampleState extends State<YoutubeApiExample> {
-  final String apiKey = 'AIzaSyCqb0cU9bxEWddVCQhOWvuIl8_uMht5sh4'; // Replace with your YouTube API key
+  final String apiKey = 'api key '; 
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   Future<List<Map<String, dynamic>>> fetchVideos(List<String> playlistIds) async {
@@ -197,7 +197,7 @@ class _YoutubeApiExampleState extends State<YoutubeApiExample> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('YouTube API Example'),
+        title: Text('YouTube API '),
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
         future: firestore.collection('good_playlists').get().then(
