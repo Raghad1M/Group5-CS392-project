@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+
 
 class AssignmentPage extends StatelessWidget {
   final List<String> pdfFiles; // List of PDF file paths
@@ -15,12 +18,15 @@ class AssignmentPage extends StatelessWidget {
           return ListTile(
             title: Text("Assignment ${index + 1}"),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PDFViewerScreen(pdfFile: pdfFiles[index]),
-                ),
-              );
+              if (index < pdfFiles.length) {
+                String selectedPdfFile = pdfFiles[index];
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PDFViewerScreen(pdfFile: selectedPdfFile),
+                  ),
+                );
+              }
             },
           );
         },
@@ -28,6 +34,7 @@ class AssignmentPage extends StatelessWidget {
     );
   }
 }
+
 
 class PDFViewerScreen extends StatelessWidget {
   final String pdfFile;
@@ -39,30 +46,9 @@ class PDFViewerScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("PDF Viewer"),
+        backgroundColor: Color.fromARGB(255, 150, 122, 161),
       ),
-      body: PDFView(
-        filePath: pdfFile,
-        enableSwipe: true,
-        swipeHorizontal: true,
-        autoSpacing: false,
-        pageFling: false,
-        onRender: (pages) {
-          // PDF document is rendered
-        },
-        onError: (error) {
-          // Handle error
-        },
-        onPageError: (page, error) {
-          // Handle page error
-        },
-        onViewCreated: (PDFViewController controller) {
-          // Do something with the controller
-        },
-       /* onPageChanged: (int page, int total) {
-          setState(() {
-                  currentPage = page;
-                });
-        },*/
+      body: SfPdfViewer.asset('assests/Tutorials.pdf'
       ),
     );
   }

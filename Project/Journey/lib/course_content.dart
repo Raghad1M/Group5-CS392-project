@@ -63,8 +63,7 @@ class CourseContentScreen extends StatelessWidget {
   screenToNavigate = ArticlesScreen (); 
 
    case "Assignments":
-  List<String> actualPdfFiles = ["Tutorials.pdf", "Tutotials2.pdf"];
-  screenToNavigate = AssignmentsScreen(pdfFiles: actualPdfFiles);
+  screenToNavigate = AssignmentsScreen();
   break;
 
 
@@ -161,22 +160,16 @@ class ArticlesScreen extends StatelessWidget {
 
 
 
-
-
-
-
-
 class AssignmentsScreen extends StatelessWidget {
-  final List<String> pdfFiles; // Actual list of PDF file paths
-
-  AssignmentsScreen({required this.pdfFiles});
-
   @override
   Widget build(BuildContext context) {
+    // Replace these file names with your actual file names
+  List<String> pdfFiles = ['asseat/Tutorials.pdf', 'asseat/Tutorials2.pdf'];
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Assignments"),
-         backgroundColor: Color.fromARGB(255, 150, 122, 161), 
+        backgroundColor: Color.fromARGB(255, 150, 122, 161),
       ),
       body: Center(
         child: AssignmentPage(pdfFiles: pdfFiles),
@@ -184,6 +177,7 @@ class AssignmentsScreen extends StatelessWidget {
     );
   }
 }
+
 
 
 
