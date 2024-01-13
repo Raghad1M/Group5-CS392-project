@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:Journey/NotificationPage.dart';
 
 class Question {
   final String question;
   final List<String> options;
-  final String correctAnswer;
+  final int correctAnswerIndex;
 
   Question({
     required this.question,
     required this.options,
-    required this.correctAnswer,
+    required this.correctAnswerIndex,
   });
 }
 
@@ -21,53 +22,21 @@ class _QuizPageState extends State<QuizPage> {
   int _currentQuestionIndex = 0;
   int _score = 0;
   bool _answered = false;
+  bool _notificationShown =
+      false; // Flag to track if NotificationPage has been shown
 
   List<Question> _questions = [
     Question(
       question: 'Because of virtual memory, the memory can be shared among',
-      options: ['Processes', 'Threads', 'Instructions', 'none of the mentioned'],
-      correctAnswer: 'Processes',
-    ),
-    Question(
-      question: 'Which one of the following is not shared by threads?',
       options: [
-        'program counter',
-        'stack',
-        'both program counter and stack',
+        'Processes',
+        'Threads',
+        'Instructions',
         'none of the mentioned'
       ],
-      correctAnswer: 'both program counter and stack',
+      correctAnswerIndex: 0,
     ),
-    Question(
-      question: 'A process can be',
-      options: [
-        'single threaded',
-        'multithreaded',
-        'both single threaded and multithreaded',
-        'none of the mentioned'
-      ],
-      correctAnswer: 'both single threaded and multithreaded',
-    ),
-    Question(
-      question: 'if one thread opens a file with read privileges then',
-      options: [
-        'other threads in the another process can also read from that file',
-        'other threads in the same process can also read from that file ',
-        'any other thread cannot read from that file',
-        'all of the mentioned'
-      ],
-      correctAnswer: 'other threads in the same process can also read from that file ',
-    ),
-    Question(
-      question: 'When the event for which a thread is blocked occurs?',
-      options: [
-        'thread moves to the ready queue',
-        'thread remains blocked ',
-        'thread completes',
-        'a new thread is provided'
-      ],
-      correctAnswer: 'thread moves to the ready queue',
-    ),
+    // Add more questions here
   ];
 
   @override
@@ -89,7 +58,11 @@ class _QuizPageState extends State<QuizPage> {
         answered: _answered,
       );
     } else {
-      return _buildResultPage();
+      if (!_notificationShown) {
+        return _buildResultPage();
+      } else {
+        return Container(); // Return an empty Container if NotificationPage has been shown
+      }
     }
   }
 
@@ -107,6 +80,55 @@ class _QuizPageState extends State<QuizPage> {
       _currentQuestionIndex++;
       _answered = false;
     });
+
+    if (_currentQuestionIndex == _questions.length) {
+      _showAchievementPopup();
+    }
+  }
+
+  void _showAchievementPopup() {
+    if (_score == _questions.length) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Congratulations!'),
+            content: Text('You have achieved a perfect score!'),
+            actions: [
+              TextButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              TextButton(
+                child: Text('View Achievement Details'),
+                onPressed: () {
+                  Navigator.pop(context);
+                  _showAchievementDetails();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
+  void _showAchievementDetails() {
+    if (_score == _questions.length) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => NotificationPage()),
+      ).then((value) {
+        // This callback runs when the NotificationPage is popped
+        _showAchievementPopup();
+        _notificationShown =
+            true; // Set the flag to true after NotificationPage is shown
+      });
+    } else {
+      _showAchievementPopup();
+    }
   }
 
   Widget _buildResultPage() {
@@ -180,7 +202,7 @@ class _QuizContentState extends State<QuizContent> {
             itemCount: currentQuestion.options.length,
             itemBuilder: (ctx, index) {
               final option = currentQuestion.options[index];
-              final isCorrect = option == currentQuestion.correctAnswer;
+              final isCorrect = index == currentQuestion.correctAnswerIndex;
               final isSelected = _selectedIndex == index;
               Color color;
 
@@ -195,8 +217,10 @@ class _QuizContentState extends State<QuizContent> {
                   color = Colors.transparent;
                 }
               } else {
-  color = isSelected ? Colors.purple.withOpacity(0.5) : Colors.transparent;
-}
+                color = isSelected
+                    ? Colors.purple.withOpacity(0.5)
+                    : Colors.transparent;
+              }
 
               return GestureDetector(
                 onTap: () {

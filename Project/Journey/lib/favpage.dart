@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:Journey/NotificationPage.dart';
+
 class FavoritePage extends StatefulWidget {
   @override
   _FavoritePageState createState() => _FavoritePageState();
 }
 
-class _FavoritePageState extends State<FavoritePage> with SingleTickerProviderStateMixin {
+class _FavoritePageState extends State<FavoritePage>
+    with SingleTickerProviderStateMixin {
   TabController? _tabController;
   List<String> favorites = [];
   List<String> filteredFavorites = [];
@@ -32,13 +35,19 @@ class _FavoritePageState extends State<FavoritePage> with SingleTickerProviderSt
           filteredFavorites = favorites; // All
           break;
         case 1:
-          filteredFavorites = favorites.where((favorite) => favorite.contains('video')).toList(); // Videos
+          filteredFavorites = favorites
+              .where((favorite) => favorite.contains('video'))
+              .toList(); // Videos
           break;
         case 2:
-          filteredFavorites = favorites.where((favorite) => favorite.contains('article')).toList(); // Articles
+          filteredFavorites = favorites
+              .where((favorite) => favorite.contains('article'))
+              .toList(); // Articles
           break;
         case 3:
-          filteredFavorites = favorites.where((favorite) => favorite.contains('book')).toList(); // Books
+          filteredFavorites = favorites
+              .where((favorite) => favorite.contains('book'))
+              .toList(); // Books
           break;
       }
     });
@@ -70,7 +79,15 @@ class _FavoritePageState extends State<FavoritePage> with SingleTickerProviderSt
           IconButton(
             icon: Icon(Icons.notifications),
             onPressed: () {
-              // Add your notification logic here
+              PageController controllerInstance = PageController();
+
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (BuildContext context) {
+                    return NotificationPage(); // Pass the controller instance
+                  },
+                ),
+              );
             },
           ),
         ],
