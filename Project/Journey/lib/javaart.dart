@@ -24,7 +24,7 @@ class ArticleList extends StatelessWidget {
   Widget build(BuildContext context) { 
     return Scaffold( 
       appBar: AppBar( 
-       title: Text('Java Articles' ,style: TextStyle(color: Colors.white),
+       title: Text('Articles' ,style: TextStyle(color: Colors.white),
         ),
          backgroundColor: Color.fromARGB(255, 150, 122, 161),
       ), 
