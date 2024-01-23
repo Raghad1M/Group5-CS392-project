@@ -20,7 +20,6 @@ void CreateAndAttachConsole() {
 }
 
 std::vector<std::string> GetCommandLineArguments() {
-  
   int argc;
   wchar_t** argv = ::CommandLineToArgvW(::GetCommandLineW(), &argc);
   if (argv == nullptr) {
@@ -28,7 +27,6 @@ std::vector<std::string> GetCommandLineArguments() {
   }
 
   std::vector<std::string> command_line_arguments;
-
   for (int i = 1; i < argc; i++) {
     command_line_arguments.push_back(Utf8FromUtf16(argv[i]));
   }
@@ -42,28 +40,36 @@ std::string Utf8FromUtf16(const wchar_t* utf16_string) {
     return std::string();
   }
 
+
   size_t utf16_length = wcslen(utf16_string);
 
-  if (utf16_length > INT_MAX) {
-    return std::string();
+  if (utf16_length > 0 && utf16_string[utf16_length - 1] != L'\0') {
+    utf16_string[utf16_length] = L'\0';
   }
 
+  if (utf16_length > INT_MAX) {
+    return std::string(); 
+  }
+
+  // Convert the UTF-16 string to UTF-8
   int input_length = static_cast<int>(utf16_length);
   int target_length = ::WideCharToMultiByte(
       CP_UTF8, WC_ERR_INVALID_CHARS, utf16_string,
-      -1, nullptr, 0, nullptr, nullptr) - 1; 
+      -1, nullptr, 0, nullptr, nullptr) - 1;
 
   if (target_length <= 0 || target_length > SIZE_MAX) {
-    return std::string(); 
+    return std::string();
   }
 
   std::string utf8_string;
   utf8_string.resize(target_length);
 
+
   int converted_length = ::WideCharToMultiByte(
       CP_UTF8, WC_ERR_INVALID_CHARS, utf16_string,
       input_length, utf8_string.data(), target_length, nullptr, nullptr);
 
+  
   if (converted_length == 0) {
     return std::string(); 
   }
