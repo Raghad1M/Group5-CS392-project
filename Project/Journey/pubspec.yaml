@@ -10,11 +10,8 @@ environment:
 
 
 dependencies:
-  flutter_pdfview: ^1.0.0 #pdf view
-  advance_pdf_viewer: ^2.0.0
   flutter:
     sdk: flutter
-    
 
   flutter_local_notifications: ^9.5.3+1
   cloud_firestore: ^4.14.0  # Update to a version compatible with firebase_core
@@ -28,7 +25,6 @@ dependencies:
   googleapis: '11.4.0' 
   url_launcher: ^6.0.6 
   youtube_player_flutter: ^8.0.0
-  syncfusion_flutter_pdfviewer: ^24.1.45
 
 
 dev_dependencies:
@@ -64,6 +60,4 @@ flutter:
 
   assets:
     - images/
-    - assests/Tutorials.pdf
-    - assests/Tutotials2.pdf
 

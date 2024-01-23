@@ -1,11 +1,8 @@
-import 'package:Journey/assigmentPage.dart';
 import 'package:Journey/videoplayer.dart';
 import 'package:Journey/sentimentanalysis.dart';
 import 'package:flutter/material.dart'; 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:Journey/QuizApp.dart';
-import 'javaart.dart'; // Import the javaart.dart file
-import 'assigmentPage.dart';
 
  
 class CourseContentScreen extends StatelessWidget { 
@@ -59,14 +56,12 @@ class CourseContentScreen extends StatelessWidget {
     case "Quizzes":
       screenToNavigate = QuizPage();
       break;
-   case "Articles":
-  screenToNavigate = ArticlesScreen (); 
-
-   case "Assignments":
-  screenToNavigate = AssignmentsScreen();
-  break;
-
-
+    case "Articles":
+      screenToNavigate = ArticlesScreen();
+      break;
+    case "Assignments":
+      screenToNavigate = AssignmentsScreen();
+      break;
     default:
       screenToNavigate = Container();
   }
@@ -140,53 +135,32 @@ class CourseContentScreen extends StatelessWidget {
 //     );
 //   }
 // }
-
-class ArticlesScreen extends StatelessWidget { 
-  
+class ArticlesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
-     
-      body: Center(
-       child: ArticleList(),
+      appBar: AppBar(
+        title: Text("Articles"),
       ),
-      
+      body: Center(
+        child: Text("Articles Screen"),
+      ),
     );
   }
-  
 
 }
-
-
 
 class AssignmentsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Replace these file names with your actual file names
-  List<String> pdfFiles = ['asseat/Tutorials.pdf', 'asseat/Tutorials2.pdf'];
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Assignments"),
-        backgroundColor: Color.fromARGB(255, 150, 122, 161),
       ),
       body: Center(
-        child: AssignmentPage(pdfFiles: pdfFiles),
+        child: Text("Assignments Screen"),
       ),
     );
   }
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
