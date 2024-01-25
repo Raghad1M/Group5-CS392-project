@@ -2,8 +2,8 @@
     <application
         android:label="Journey"
         android:name="${applicationName}"
-        android:icon="@mipmap/launcher_icon">
-        <allowBackup="false">
+        android:icon="@mipmap/launcher_icon"
+        android:allowBackup="false">
         <activity
             android:name=".MainActivity"
             android:exported="true"
