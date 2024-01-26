@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-
 class VideoListScreen extends StatefulWidget {
+  final String course;
+
+  VideoListScreen({required this.course});
+
   @override
   _VideoListScreenState createState() => _VideoListScreenState();
 }
@@ -23,7 +26,7 @@ class _VideoListScreenState extends State<VideoListScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 150, 122, 161),
-        title: Text('Video List'),
+        title: Text('${widget.course} Video List'),
       ),
       body: Column(
         children: [
@@ -60,7 +63,7 @@ class _VideoListScreenState extends State<VideoListScreen> {
     final String query = _searchController.text.toLowerCase();
 
     return StreamBuilder(
-      stream: firestore.collection('good_playlists').snapshots(),
+      stream: firestore.collection('${widget.course}_playlists').snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
@@ -70,8 +73,7 @@ class _VideoListScreenState extends State<VideoListScreen> {
           return Center(child: Text('No videos found.'));
         } else {
           final List<Map<String, dynamic>> filteredVideos = snapshot.data!.docs
-              .where((doc) =>
-                  (doc['title'] as String).toLowerCase().contains(query))
+              .where((doc) => (doc['title'] as String).toLowerCase().contains(query))
               .map((doc) => doc.data() as Map<String, dynamic>)
               .toList();
 
@@ -82,8 +84,7 @@ class _VideoListScreenState extends State<VideoListScreen> {
 
               return ListTile(
                 title: Text(video['title']),
-                subtitle:
-                    Text('Sentiment Score: ${video['sentimentScore']}'),
+                subtitle: Text('Sentiment Score: ${video['sentimentScore']}'),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
