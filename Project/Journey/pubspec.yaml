@@ -11,6 +11,7 @@ environment:
 
 dependencies:
   flutter_pdfview: ^1.0.0 #pdf view
+  syncfusion_flutter_pdfviewer: ^24.1.45
   advance_pdf_viewer: ^2.0.0
   flutter:
     sdk: flutter
@@ -28,8 +29,7 @@ dependencies:
   googleapis: '11.4.0' 
   url_launcher: ^6.0.6 
   youtube_player_flutter: ^8.0.0
-  syncfusion_flutter_pdfviewer: ^24.1.45
-
+  
 
 dev_dependencies:
   flutter_test:
@@ -64,6 +64,7 @@ flutter:
 
   assets:
     - images/
-    - assests/Tutorials.pdf
-    - assests/Tutotials2.pdf
+    - assets/Tutorials.pdf
+    - assets/Tutorials2.pdf
+    
 

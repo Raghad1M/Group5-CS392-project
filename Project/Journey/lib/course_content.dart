@@ -164,7 +164,7 @@ class AssignmentsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Replace these file names with your actual file names
-  List<String> pdfFiles = ['asseat/Tutorials.pdf', 'asseat/Tutorials2.pdf'];
+  List<String> pdfFiles = ['assets/Tutorials.pdf', 'assets/Tutorials2.pdf'];
 
     return Scaffold(
       appBar: AppBar(

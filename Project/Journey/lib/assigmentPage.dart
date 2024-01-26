@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
+import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 
@@ -48,7 +48,7 @@ class PDFViewerScreen extends StatelessWidget {
         title: Text("PDF Viewer"),
         backgroundColor: Color.fromARGB(255, 150, 122, 161),
       ),
-      body: SfPdfViewer.asset('assests/Tutorials.pdf'
+      body: SfPdfViewer.asset(pdfFile
       ),
     );
   }
