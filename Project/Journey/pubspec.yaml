@@ -10,6 +10,9 @@ environment:
 
 
 dependencies:
+  flutter_pdfview: ^1.0.0 #pdf view
+  syncfusion_flutter_pdfviewer: ^24.1.45
+  advance_pdf_viewer: ^2.0.0
   flutter:
     sdk: flutter
 
@@ -67,3 +70,7 @@ flutter:
     - images/javajvajva.png
     - images/ossoso.jpg
     - images/swee.png
+    - assets/Tutorials.pdf
+    - assets/Tutorials2.pdf
+    
+
