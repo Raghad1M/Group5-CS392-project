@@ -10,7 +10,7 @@ class YoutubeApiExample extends StatefulWidget {
 }
 
 class _YoutubeApiExampleState extends State<YoutubeApiExample> {
-  final String apiKey = 'api key '; 
+  final String apiKey = 'AIzaSyAz0js78Pg-WPsdx_QKqjAvUYqdR6jRS_E';
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   Future<List<Map<String, dynamic>>> fetchVideos(List<String> playlistIds) async {
@@ -18,7 +18,7 @@ class _YoutubeApiExampleState extends State<YoutubeApiExample> {
 
     for (var playlistId in playlistIds) {
       final String apiUrl =
-          'https://www.googleapis.com/youtube/v3/playlistItems?key=$apiKey&playlistId=$playlistId&part=snippet&maxResults=10';
+          'https://www.googleapis.com/youtube/v3/playlistItems?key=$apiKey&playlistId=$playlistId&part=snippet&maxResults=150';
 
       final response = await http.get(Uri.parse(apiUrl));
 
@@ -66,9 +66,8 @@ class _YoutubeApiExampleState extends State<YoutubeApiExample> {
 
         print('Video Title: $videoTitle');
 
-        // Check if the sentiment score is high and the thumbnail URL is valid
         if (sentimentScore > 0.1 && isValidUrl(thumbnailUrl) && videoTitle != null) {
-          await firestore.collection('good_playlists').add({
+          await firestore.collection('swe_videos').add({
             'title': videoTitle,
             'videoId': video['videoId'],
             'videoTitle': videoTitle,
@@ -88,59 +87,57 @@ class _YoutubeApiExampleState extends State<YoutubeApiExample> {
   bool isValidUrl(String url) {
     return url != null && url.isNotEmpty;
   }
+Future<void> updatePlaylistData() async {
+  try {
+    List<String> playlistIds = await searchPlaylists('Software engineering');
+    print('Playlist IDs: $playlistIds');
 
-  Future<void> updatePlaylistData() async {
-    try {
-      List<String> playlistIds = await searchPlaylists('java');
-      print('Playlist IDs: $playlistIds');
+    List<Map<String, dynamic>> newVideos = await fetchVideos(playlistIds);
 
-      List<Map<String, dynamic>> existingVideos = await firestore.collection('good_playlists').get().then(
-        (querySnapshot) {
-          List<Map<String, dynamic>> playlists = [];
-          for (var doc in querySnapshot.docs) {
-            playlists.add(doc.data() as Map<String, dynamic>);
-          }
-          return playlists;
-        },
-      );
+    for (var video in newVideos) {
+      bool videoExists = await firestore
+          .collection('database_videos') 
+          .where('videoId', isEqualTo: video['videoId'])
+          .get()
+          .then((querySnapshot) => querySnapshot.docs.isNotEmpty);
 
-      List<Map<String, dynamic>> newVideos = await fetchVideos(playlistIds);
+      if (!videoExists) {
+        double sentimentScore = await analyzeSentiment(video['title']);
+        print('Sentiment Score: $sentimentScore');
 
-      for (var video in newVideos) {
-        // Check if the video already exists in the Firestore collection
-        bool videoExists = existingVideos.any((existingVideo) => existingVideo['videoId'] == video['videoId']);
+        String videoTitle = video['title'] ?? '';
+        String thumbnailUrl = video['thumbnailUrl'] ?? '';
 
-        if (!videoExists) {
-          double sentimentScore = await analyzeSentiment(video['title']);
-          print('Sentiment Score: $sentimentScore');
+        print('Video Title: $videoTitle');
 
-          String videoTitle = video['title'] ?? '';
-          print('Video Title: $videoTitle');
+        if (sentimentScore > 0.1 && isValidUrl(thumbnailUrl) && videoTitle.isNotEmpty) {
+          await firestore.collection('swe_videos').add({
+            'title': videoTitle,
+            'videoId': video['videoId'],
+            'videoTitle': videoTitle,
+            'thumbnailUrl': thumbnailUrl,
+            'sentimentScore': sentimentScore,
+          });
 
-          if (sentimentScore > 0.1 && videoTitle != null) {
-            await firestore.collection('good_playlists').add({
-              'title': video['title'],
-              'videoId': video['videoId'],
-              'videoTitle': videoTitle,
-              'sentimentScore': sentimentScore,
-            });
-
-            print('Storing good playlist: ${video['title']}');
-          } else {
-            print('Skipping playlist due to low sentiment or missing thumbnail: ${video['title']}');
-          }
+          print('Storing good playlist: $videoTitle');
+        } else {
+          print('Skipping playlist due to low sentiment or missing/invalid thumbnail: $videoTitle');
         }
       }
-
-      print('Sentiment analysis update completed.');
-    } catch (e) {
-      print('Error updating playlist data: $e');
     }
-  }
 
-  Future<List<String>> searchPlaylists(String query) async {
+    print('Sentiment analysis update for database videos completed.');
+
+  } catch (e) {
+    print('Error updating database videos: $e');
+  }
+}
+
+     
+Future<List<String>> searchPlaylists(String query) async {
+  try {
     final String apiUrl =
-        'https://www.googleapis.com/youtube/v3/search?key=$apiKey&q=$query&type=playlist&part=id&maxResults=5';
+        'https://www.googleapis.com/youtube/v3/search?key=$apiKey&q=$query&type=playlist&part=id&maxResults=20';
 
     final response = await http.get(Uri.parse(apiUrl));
 
@@ -154,16 +151,21 @@ class _YoutubeApiExampleState extends State<YoutubeApiExample> {
 
       return playlistIds;
     } else {
-      throw Exception('Failed to search for playlists');
+      print('Failed to search for playlists. Status code: ${response.statusCode}, Response body: ${response.body}');
+      return [];
     }
+  } catch (e) {
+    print('Error in searchPlaylists: $e');
+    return [];
   }
+}
 
   Future<double> analyzeSentiment(String text) async {
     try {
       return await performSentimentAnalysis(text);
     } catch (e) {
       print('Error in sentiment analysis: $e');
-      return 0.0; // Default value in case of an error, assuming neutral sentiment
+      return 0.0; 
     }
   }
 
@@ -185,52 +187,31 @@ class _YoutubeApiExampleState extends State<YoutubeApiExample> {
         return data['documentSentiment']['score'].toDouble();
       } else {
         print('Failed to analyze sentiment. Status code: ${response.statusCode}, Response body: ${response.body}');
-        return 0.0; // Default value in case of an error, assuming neutral sentiment
+        return 0.0; 
       }
     } catch (e) {
       print('Error in analyzeSentiment: $e');
-      return 0.0; // Default value in case of an error, assuming neutral sentiment
+      return 0.0; 
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('YouTube API '),
-      ),
-      body: FutureBuilder<List<Map<String, dynamic>>>(
-        future: firestore.collection('good_playlists').get().then(
-          (querySnapshot) {
-            List<Map<String, dynamic>> playlists = [];
-            for (var doc in querySnapshot.docs) {
-              playlists.add(doc.data() as Map<String, dynamic>);
-            }
-            return playlists;
+ @override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: Text('YouTube API'),
+    ),
+    body: Column(
+      children: [
+        ElevatedButton(
+          onPressed: () {
+            updatePlaylistData();
           },
+          child: Text('Update Playlist Data'),
         ),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('No good playlists found.'));
-          } else {
-            return Column(
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    // Call the function to update playlist data
-                    updatePlaylistData();
-                  },
-                  child: Text('Update Playlist Data'),
-                ),
-              ],
-            );
-          }
-        },
-      ),
-    );
-  }
+      ],
+    ),
+  );
 }
+
+  }

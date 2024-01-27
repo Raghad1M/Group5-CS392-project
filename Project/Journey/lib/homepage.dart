@@ -4,6 +4,7 @@ import 'package:Journey/course_content3.dart';
 import 'package:Journey/course_content4.dart';
 import 'package:Journey/disscusionBoard.dart';
 import 'package:Journey/favpage.dart';
+import 'package:Journey/sentimentanalysis.dart';
 import 'package:Journey/user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:Journey/NotificationPage.dart';
@@ -34,22 +35,22 @@ class _HomePageState extends State<HomePage> {
     Course(
       name: 'Operating system',
       university: 'Imamu',
-      image: 'images/Ppic.png',
+      image: 'images/ossoso.jpg',
     ),
     Course(
       name: 'Java 1',
       university: 'Imamu',
-      image: 'images/Ppic.png',
+      image: 'images/javajvajva.png',
     ),
     Course(
       name: 'Database',
       university: 'Imamu',
-      image: 'images/Ppic.png',
+      image: 'images/datdatdtdat.png',
     ),
     Course(
       name: 'Software engineering',
       university: 'Imamu',
-      image: 'images/Ppic.png',
+      image: 'images/swee.png',
     ),
   ];
   List<Course> filteredCourses = [];
@@ -87,7 +88,7 @@ class _HomePageState extends State<HomePage> {
       case 2:
         return ProfilePage();
       case 3:
-        return ForumScreen(); // Add case for MessagesPage
+        return ForumScreen();
       default:
         return SizedBox();
     }
@@ -135,7 +136,7 @@ class _HomePageState extends State<HomePage> {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
-                    // Navigate to different screens based on the selected course
+
                     switch (filteredCourses[index].name) {
                       case 'Operating system':
                         Navigator.push(
@@ -155,7 +156,7 @@ class _HomePageState extends State<HomePage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => CourseContentScreen3()),
+                              builder: (context) =>  CourseContentScreen3()),
                         );
                         break;
                         case 'Software engineering':
@@ -165,9 +166,8 @@ class _HomePageState extends State<HomePage> {
                               builder: (context) => CourseContentScreen4()),
                         );
                         break;
-                      // Add cases for other courses as needed
                       default:
-                      // Handle cases not specified above
+
                     }
                   },
                   child: Card(
@@ -184,8 +184,8 @@ class _HomePageState extends State<HomePage> {
                         SizedBox(height: 8),
                         Image.asset(
                           filteredCourses[index].image,
-                          width: 80,
-                          height: 80,
+                          width: 150,
+                          height: 90,
                         ),
                         SizedBox(height: 8),
                         Row(
@@ -221,7 +221,7 @@ class _HomePageState extends State<HomePage> {
         bottomNavigationBar: Theme(
           data: Theme.of(context).copyWith(
             canvasColor:
-                Color.fromARGB(255, 150, 122, 161), // Set the color here
+                Color.fromARGB(255, 150, 122, 161),
           ),
           child: BottomNavigationBar(
             currentIndex: _currentIndex,

@@ -1,5 +1,7 @@
 import 'package:Journey/NotificationPage.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class FavoritePage extends StatefulWidget {
   @override
   _FavoritePageState createState() => _FavoritePageState();
@@ -16,39 +18,37 @@ class _FavoritePageState extends State<FavoritePage> with SingleTickerProviderSt
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
     _tabController!.addListener(_handleTabChange);
-    filteredFavorites = favorites;
-  }
-
-  @override
-  void dispose() {
-    _tabController!.dispose();
-    super.dispose();
+    _fetchFavorites(); // Fetch favorites when the page is initialized
   }
 
   void _handleTabChange() {
     setState(() {
-      // Logic to handle tab changes and filter favorites accordingly
       switch (_tabController!.index) {
         case 0:
-          filteredFavorites = favorites; // All
+          filteredFavorites = favorites;
           break;
         case 1:
-          filteredFavorites = favorites.where((favorite) => favorite.contains('video')).toList(); // Videos
+          filteredFavorites = favorites.where((favorite) => favorite.contains('video')).toList();
           break;
         case 2:
-          filteredFavorites = favorites.where((favorite) => favorite.contains('article')).toList(); // Articles
+          filteredFavorites = favorites.where((favorite) => favorite.contains('article')).toList();
           break;
         case 3:
-          filteredFavorites = favorites.where((favorite) => favorite.contains('book')).toList(); // Books
+          filteredFavorites = favorites.where((favorite) => favorite.contains('book')).toList();
           break;
       }
     });
   }
 
-  void addToFavorites(String item) {
+  void _fetchFavorites() async {
+    // Fetch favorites from the database (Firestore)
+    CollectionReference favoritesCollection = FirebaseFirestore.instance.collection('favorites');
+    QuerySnapshot querySnapshot = await favoritesCollection.get();
+
     setState(() {
-      favorites.add(item);
-      _handleTabChange(); // Update the filtered list when a new item is added
+      // Update the favorites list
+      favorites = querySnapshot.docs.map((doc) => doc['title'] as String).toList();
+      _handleTabChange(); // Update the filteredFavorites based on the current tab
     });
   }
 
@@ -58,6 +58,7 @@ class _FavoritePageState extends State<FavoritePage> with SingleTickerProviderSt
       appBar: AppBar(
         title: Text('Favorites'),
         backgroundColor: Color.fromARGB(255, 150, 122, 161),
+              automaticallyImplyLeading: false,
         bottom: TabBar(
           controller: _tabController,
           tabs: [
@@ -95,7 +96,7 @@ class _FavoritePageState extends State<FavoritePage> with SingleTickerProviderSt
               onChanged: (value) {
                 setState(() {
                   searchText = value;
-                  _handleTabChange(); // Update the filtered list based on search text
+                  _handleTabChange();
                 });
               },
             ),

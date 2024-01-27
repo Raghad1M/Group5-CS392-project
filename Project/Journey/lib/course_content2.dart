@@ -1,5 +1,7 @@
+import 'package:Journey/javaart.dart';
 import 'package:Journey/videoplayer.dart';
 import 'package:Journey/sentimentanalysis.dart';
+import 'package:Journey/videoplayer3.dart';
 import 'package:flutter/material.dart'; 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:Journey/QuizApp.dart';
@@ -51,12 +53,20 @@ class CourseContentScreen2 extends StatelessWidget {
 
     switch (title) {
       case "Videos":
-        screenToNavigate = VideoListScreen(course: 'java1');
+        screenToNavigate = VideoListScreen();
         break;
-      // Add cases for other courses
-      default:
-        screenToNavigate = Container();
-    }
+    // case "Quizzes":
+    //   screenToNavigate = QuizPage();
+    //   break;
+    case "Articles":
+      screenToNavigate = ArticleList();
+      break;
+    // case "Assignments":
+    //   screenToNavigate = AssignmentsScreen();
+    //   break;
+    default:
+      screenToNavigate = Container();
+  }
 
     return GestureDetector(
       onTap: () {

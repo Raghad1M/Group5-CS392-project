@@ -17,7 +17,11 @@ class _SingUpScreenState extends State<SingUpScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
   final TextEditingController _repassController = TextEditingController();
+
 Future<void> _createAccount() async {
+  
+  RegExp passwordRegExp = RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{8,}$');
+
   try {
     UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
       email: _emailController.text,
@@ -25,17 +29,19 @@ Future<void> _createAccount() async {
     );
 
     if (userCredential.user != null) {
-      // Set display name
+  
+      if (!passwordRegExp.hasMatch(_passController.text)) {
+
+        showSnackbar('Password must contain at least one uppercase letter, one lowercase letter, one digit, one special character, and be 8 characters or longer.');
+        return;
+      }
       await userCredential.user!.updateProfile(displayName: _nameController.text);
 
-      // Store additional user data in Firestore 'users' collection
       await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).set({
         'name': _nameController.text,
         'email': _emailController.text,
-        // Add more fields as needed for user data
+  
       });
-
-      // Registration successful, navigate to the home page
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (BuildContext context) => HomePage(),
@@ -43,8 +49,26 @@ Future<void> _createAccount() async {
       );
     }
   } catch (e) {
-    print('Error signing in: $e');
+    if (e is FirebaseAuthException) {
+      if (e.code == 'weak-password') {
+        showSnackbar('The password provided is too weak. Please choose a stronger password.');
+      } else if (e.code == 'email-already-in-use') {
+        showSnackbar('The account already exists for that email. Please use a different email or login.');
+      } else {
+        print('Error signing in: $e');
+        showSnackbar('An unexpected error occurred. Please try again later.');
+      }
+    }
   }
+}
+
+void showSnackbar(String message) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(message),
+      duration: Duration(seconds: 5), 
+    ),
+  );
 }
 
 

@@ -1,5 +1,8 @@
+import 'package:Journey/course_content.dart';
+import 'package:Journey/osart.dart';
 import 'package:Journey/videoplayer.dart';
 import 'package:Journey/sentimentanalysis.dart';
+import 'package:Journey/videoplayer2.dart';
 import 'package:flutter/material.dart'; 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:Journey/QuizApp.dart';
@@ -51,11 +54,20 @@ class CourseContentScreen1 extends StatelessWidget {
 
     switch (title) {
       case "Videos":
-        screenToNavigate = VideoListScreen(course: 'Operating system');
+        screenToNavigate = VideoListScreen2();
         break;
-      // Add cases for other courses
-      default:
-        screenToNavigate = Container();
+    case "Quizzes":
+      screenToNavigate = QuizPage();
+      break;
+    case "Articles":
+      screenToNavigate = ArticleList();
+      break;
+    case "Assignments":
+      screenToNavigate = AssignmentsScreen();
+      break;
+    default:
+      screenToNavigate = Container();
+
     }
 
     return GestureDetector(

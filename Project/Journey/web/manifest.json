@@ -1,6 +1,6 @@
 {
-    "name": "sdd",
-    "short_name": "sdd",
+    "name": "journey",
+    "short_name": "journey",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#hexcode",

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class DetailsScreen extends StatelessWidget {
   final int itemIndex;
-
-  const DetailsScreen({Key? key, required this.itemIndex}) : super(key: key);
+    final List<String> favorites;
+  DetailsScreen({required this.itemIndex, required this.favorites});
 
   @override
   Widget build(BuildContext context) {

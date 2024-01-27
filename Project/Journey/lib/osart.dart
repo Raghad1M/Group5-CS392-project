@@ -1,18 +1,5 @@
 import 'package:flutter/material.dart'; 
  
-void main() { 
-  runApp(MyApp()); 
-} 
- 
-class MyApp extends StatelessWidget { 
-  @override 
-  Widget build(BuildContext context) { 
-    return MaterialApp( 
-      title: 'Operating System Articles', 
-      home: ArticleList(), 
-    ); 
-  } 
-} 
  
 class ArticleList extends StatelessWidget { 
   final List<String> articles = [ 
@@ -34,8 +21,6 @@ class ArticleList extends StatelessWidget {
           return ListTile( 
             title: Text(articles[index]), 
             onTap: () { 
-              // Add navigation to the article details page or any other action 
-              // you want to perform when an article is tapped. 
               // Example: Navigator.push(context, MaterialPageRoute(builder: (context) => ArticleDetails(articles[index]))); 
             }, 
           ); 

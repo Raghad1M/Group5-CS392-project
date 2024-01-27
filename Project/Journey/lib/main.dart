@@ -24,8 +24,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: const Color.fromARGB(255, 150, 122, 161), // Set your primary color here
-        // Other theme configurations...
+        primaryColor: const Color.fromARGB(255, 150, 122, 161), 
       ),
       initialRoute: '/firstPage',
       routes: {
@@ -74,11 +73,11 @@ class FirstPage extends StatelessWidget {
                         style: TextStyle(
                             fontSize: 16,
                             color: Color.fromARGB(255, 118, 117,
-                                117) // Adjust the font size as needed
+                                117)
                             ),
                       ),
                       const SizedBox(
-                          height: 90), // Add space between the text and button
+                          height: 90), 
                       ElevatedButton(
                         onPressed: () {
                           PageController controllerInstance = PageController();
@@ -88,7 +87,7 @@ class FirstPage extends StatelessWidget {
                               builder: (BuildContext context) {
                                 return Guesthome(
                                     controller:
-                                        controllerInstance); // Pass the controller instance
+                                        controllerInstance);
                               },
                             ),
                           );
@@ -100,7 +99,7 @@ class FirstPage extends StatelessWidget {
                               const Color.fromARGB(255, 245, 230, 232),
                           padding: const EdgeInsets.symmetric(
                               horizontal: 100,
-                              vertical: 15), // Adjust button padding
+                              vertical: 15), 
                         ),
                         child: const Text('Let\'s get started'),
                       ),
@@ -114,7 +113,7 @@ class FirstPage extends StatelessWidget {
                               builder: (BuildContext context) {
                                 return LoginScreen(
                                     controller:
-                                        controllerInstance); // Pass the controller instance
+                                        controllerInstance); 
                               },
                             ),
                           );
@@ -126,7 +125,7 @@ class FirstPage extends StatelessWidget {
                               const Color.fromARGB(255, 150, 122, 161),
                           padding: const EdgeInsets.symmetric(
                               horizontal: 130,
-                              vertical: 15), // Adjust button padding
+                              vertical: 15),
                         ),
                         child: const Text('Sign in'),
                       ),

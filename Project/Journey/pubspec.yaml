@@ -25,6 +25,9 @@ dependencies:
   googleapis: '11.4.0' 
   url_launcher: ^6.0.6 
   youtube_player_flutter: ^8.0.0
+  firebase_storage: ^11.6.0
+  image_picker: ^1.0.7
+  file_picker: ^6.1.1
 
 
 dev_dependencies:
@@ -45,7 +48,7 @@ flutter_launcher_icons:
   windows:
     generate: true
     image_path: "images/logo.png"
-    icon_size: 60 # min:48, max:256, default: 48
+    icon_size: 120 # min:48, max:256, default: 48
   macos:
     generate: true
     image_path: "images/logo.png"
@@ -60,4 +63,7 @@ flutter:
 
   assets:
     - images/
-
+    - images\datdatdtdat.png
+    - images/javajvajva.png
+    - images/ossoso.jpg
+    - images/swee.png

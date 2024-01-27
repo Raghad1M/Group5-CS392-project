@@ -1,5 +1,6 @@
 import 'package:Journey/videoplayer.dart';
 import 'package:Journey/sentimentanalysis.dart';
+import 'package:Journey/videoplayer2.dart';
 import 'package:flutter/material.dart'; 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:Journey/QuizApp.dart';
@@ -51,7 +52,7 @@ class CourseContentScreen extends StatelessWidget {
 
   switch (title) {
     case "Videos":
-      screenToNavigate =  VideoListScreen();
+      screenToNavigate =  VideoListScreen2();
       break;
     case "Quizzes":
       screenToNavigate = QuizPage();
@@ -124,17 +125,7 @@ class CourseContentScreen extends StatelessWidget {
 }
 }
 
-// class QuizApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text("Quiz"),
-//       ),
-//       // Add the desired content for the Quiz screen
-//     );
-//   }
-// }
+
 class ArticlesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

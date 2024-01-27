@@ -1,17 +1,36 @@
+import 'package:Journey/favorite_items.dart';
 import 'package:flutter/material.dart';
-import 'favorite_items.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class FavoriteButton extends StatefulWidget {
-  final int itemIndex;
+  final Map<String, dynamic> video;
 
-  const FavoriteButton({Key? key, required this.itemIndex}) : super(key: key);
+  const FavoriteButton({Key? key, required this.video}) : super(key: key);
 
   @override
   _FavoriteButtonState createState() => _FavoriteButtonState();
 }
 
 class _FavoriteButtonState extends State<FavoriteButton> {
+  late User? _user;
   bool isFavorite = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _user = FirebaseAuth.instance.currentUser;
+    _checkIsFavorite(); 
+  }
+
+  Future<void> _checkIsFavorite() async {
+    if (_user != null) {
+
+      bool result = await FavoriteItems.isFavoriteForUser(_user!.uid, widget.video['title']);
+      setState(() {
+        isFavorite = result;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,17 +39,34 @@ class _FavoriteButtonState extends State<FavoriteButton> {
         isFavorite ? Icons.favorite : Icons.favorite_border,
         color: Colors.red,
       ),
-      onPressed: () {
-        setState(() {
-          isFavorite = !isFavorite;
-        });
+      onPressed: () async {
+    
+        if (_user != null) {
+          setState(() {
+            isFavorite = !isFavorite;
+          });
 
-        if (isFavorite) {
-          // Save the item to favorites
-          FavoriteItems.addToFavorites(widget.itemIndex);
+          if (isFavorite) {
+            await FavoriteItems.addToFavoritesForUser(_user!.uid, widget.video['title']);
+          } else {
+            FavoriteItems.removeFromFavoritesForUser(_user!.uid, widget.video['title']);
+          }
         } else {
-          // Remove the item from favorites
-          FavoriteItems.removeFromFavorites(widget.itemIndex);
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text('Login Required'),
+              content: Text('Please log in to add favorites.'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            ),
+          );
         }
       },
     );

@@ -16,45 +16,40 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
   String _errorMessage = '';
-  
-Future<void> _login(BuildContext context) async {
-  try {
-    UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: _emailController.text,
-      password: _passController.text,
-    );
 
-    if (userCredential.user != null) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => HomePage()),
+  Future<void> _login(BuildContext context) async {
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passController.text,
       );
+
+      if (userCredential.user != null) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => HomePage()), // Navigate to the home page after successful login
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      String errorMessage = 'Error signing in';
+
+      if (e.code == 'invalid-email') {
+        errorMessage = 'Invalid email format';
+      } else if (e.code == 'user-not-found') {
+        errorMessage = 'No user found with this email';
+      } else if (e.code == 'invalid-credential' || e.code == 'wrong-password') {
+        errorMessage = 'Invalid email or password';
+      } else {
+        errorMessage = 'Something went wrong';
+      }
+
+      setState(() {
+        _errorMessage = errorMessage; 
+      });
+
+    } catch (e) {
+      print('Error signing in: $e');
     }
-  } on FirebaseAuthException catch (e) {
-    String errorMessage = 'Error signing in';
-
-    if (e.code == 'invalid-email') {
-      errorMessage = 'Invalid email format';
-    } else if (e.code == 'user-not-found') {
-      errorMessage = 'No user found with this email';
-    } else if (e.code == 'invalid-credential') {
-      errorMessage = 'Invalid email or password'; 
-    } else if (e.code == 'wrong-password') {
-      errorMessage = 'Invalid email or password';
-    } else {
-      errorMessage = 'Something went wrong';
-    }
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(errorMessage),
-        duration: Duration(seconds: 3),
-      ),
-    );
-
-  } catch (e) {
-    print('Error signing in: $e');
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +58,20 @@ Future<void> _login(BuildContext context) async {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+  
+          SizedBox(
+            height: 15,
+          ),
+          if (_errorMessage.isNotEmpty)
+            Text(
+              _errorMessage,
+              style: TextStyle(
+                color: Colors.red,
+                fontSize: 13,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w500,
+              ),
+            ),
           SizedBox(
             height: 100,
           ),
