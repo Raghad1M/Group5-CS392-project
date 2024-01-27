@@ -50,22 +50,26 @@ class _ForumScreenState extends State<ForumScreen> {
       List<Message> messages = [];
 
       for (var doc in snapshot.docs) {
-        String senderId = doc['senderId'] ?? ''; // Add null check
-        String senderName = "Unknown";
+        String senderId = doc['senderId'] ?? '';
+        String senderName = doc["senderName"]??'';
 
         if (senderId.isNotEmpty) {
-          DocumentSnapshot<Map<String, dynamic>> userDoc =
-              await FirebaseFirestore.instance.collection('users').doc(senderId).get();
+          try {
+            DocumentSnapshot<Map<String, dynamic>> userDoc =
+                await FirebaseFirestore.instance.collection('users').doc(senderId).get();
 
-          if (userDoc.exists) {
-            senderName = userDoc.data()!['name'];
+            if (userDoc.exists) {
+              senderName = userDoc.data()!['name'] ?? "Unknown";
+            }
+          } catch (e) {
+            print('Error fetching user data: $e');
           }
         }
 
         Timestamp timestamp = doc['timestamp'] ?? Timestamp.now();
 
         String fileName = doc['fileName'] ?? '';
-        String fileExtension = doc['fileExtension'] ?? ''; // Handle the case where it might not exist
+        String fileExtension = doc['fileExtension'] ?? '';
         String filePath = doc['filePath'] ?? '';
 
         messages.add(Message(

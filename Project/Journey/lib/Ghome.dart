@@ -82,6 +82,8 @@ class _Guesthome extends State<Guesthome> {
         return pop();
       case 2:
         return pop();
+      case 3:
+        return pop();
       default:
         return SizedBox(); 
     }
@@ -161,82 +163,91 @@ class _Guesthome extends State<Guesthome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _buildBody(_currentIndex),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (int index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
+        body: _buildBody(_currentIndex),
+        bottomNavigationBar: Theme(
+          data: Theme.of(context).copyWith(
+            canvasColor:
+                Color.fromARGB(255, 150, 122, 161),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: 'Favorites',
+          child: BottomNavigationBar(
+            currentIndex: _currentIndex,
+            onTap: (int index) {
+              setState(() {
+                _currentIndex = index;
+              });
+            },
+            backgroundColor: Color.fromARGB(255, 150, 122, 161),
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.favorite),
+                label: 'Favorites',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person),
+                label: 'Profile',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.message),
+                label: 'Messages',
+              ),
+            ],
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat),
-            label: 'chat',
-          ),
-        ],
-      ),
-    );
+        ));
   }
 }
-
 class pop extends StatelessWidget {
-  const pop({super.key});
+  const pop({Key? key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-          child: Column(
-        children: [
-          SizedBox( 
-            height: 400, 
-          ),
-          Text(' YOU HAVE TO LOGIN OR SIGN UP!',style: TextStyle( 
-                    fontSize: 23, 
-                    fontFamily: 'Poppins', 
-                    fontWeight: FontWeight.w500, 
-                  ),), 
-                    SizedBox( 
-            height: 30, 
-          ),
-          ElevatedButton(
-            onPressed: () {
-              PageController controllerInstance = PageController();
-
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (BuildContext context) {
-                    return LoginScreen(
-                        controller:
-                            controllerInstance); 
-                  },
-                ),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Color.fromARGB(255, 150, 122, 161),
-              foregroundColor: const Color.fromARGB(255, 245, 230, 232),
-
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 130, vertical: 15), 
+        child: Column(
+          children: [
+            SizedBox(height: 0,),
+            Text(
+              'YOU HAVE TO LOGIN OR SIGN UP!',
+              style: TextStyle(
+                fontSize: 23,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w500,
+              ),
             ),
-            child: const Text('Sign in'),
-          ),
-        ],
-      )),
+            SizedBox(
+              height: 30,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                PageController controllerInstance = PageController();
+
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return LoginScreen(
+                        controller: controllerInstance,
+                      );
+                    },
+                  ),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color.fromARGB(255, 150, 122, 161),
+                foregroundColor: const Color.fromARGB(255, 245, 230, 232),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 130,
+                  vertical: 15,
+                ),
+              ),
+              child: const Text('Sign in'),
+            ),
+          ],
+        ),
+      ),
     );
   }
+
 }
