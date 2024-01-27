@@ -10,7 +10,7 @@ class YoutubeApiExample extends StatefulWidget {
 }
 
 class _YoutubeApiExampleState extends State<YoutubeApiExample> {
-  final String apiKey = 'AIzaSyAz0js78Pg-WPsdx_QKqjAvUYqdR6jRS_E';
+  final String apiKey = 'secret';
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   Future<List<Map<String, dynamic>>> fetchVideos(List<String> playlistIds) async {
