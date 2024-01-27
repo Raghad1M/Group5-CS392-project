@@ -2,8 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:pdf_flutter/pdf_flutter.dart';
+
 import 'dart:io';
 
 bool isUserAuthenticated() {
@@ -207,17 +213,41 @@ class _ForumScreenState extends State<ForumScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text('File:'),
-
-                                  Image.network(
-                                    message.downloadUrl,
-                                    width: 200,
-                                    height: 200,
-                                  ),
-    
-                                  Text('PDF File: ${message.fileName}'),
-
+                                  if (message.fileExtension.toLowerCase() == 'pdf')
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => PDFScreen(
+                                              pdfUrl: message.downloadUrl,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: Text('View PDF'),
+                                    )
+                                  else
+                                    Image.network(
+                                      message.downloadUrl,
+                                      loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                                        if (loadingProgress == null) {
+                                          return child;
+                                        } else {
+                                          return Center(
+                                            child: CircularProgressIndicator(
+                                              value: loadingProgress.expectedTotalBytes != null
+                                                  ? loadingProgress.cumulativeBytesLoaded / (loadingProgress.expectedTotalBytes ?? 1)
+                                                  : null,
+                                            ),
+                                          );
+                                        }
+                                      },
+                                    ),
+                                  Text('File Name: ${message.fileName}'),
                                 ],
                               ),
+
                           ],
                         ),
                         trailing: isCurrentUser
@@ -269,7 +299,7 @@ class _ForumScreenState extends State<ForumScreen> {
                               )
                             : null,
                         onTap: () {
-           
+                          // Handle tapping on the message if needed
                         },
                       );
                     },
@@ -293,7 +323,7 @@ class _ForumScreenState extends State<ForumScreen> {
                 IconButton(
                   icon: Icon(Icons.add_photo_alternate),
                   onPressed: () {
-      
+                    // Send the file (image, video, pdf, etc.)
                     sendFile();
                   },
                 ),
@@ -301,7 +331,7 @@ class _ForumScreenState extends State<ForumScreen> {
                   icon: Icon(Icons.send),
                   onPressed: () {
                     if (isUserAuthenticated()) {
-         
+                      // Send a text message
                       sendMessage(fileName: '', fileExtension: '', filePath: '');
                     } else {
                       print('User not authenticated. Please sign in.');
@@ -312,6 +342,26 @@ class _ForumScreenState extends State<ForumScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+
+class PDFScreen extends StatelessWidget {
+  final String pdfUrl;
+
+  PDFScreen({required this.pdfUrl});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('PDF Viewer'),
+        backgroundColor: Color.fromARGB(255, 150, 122, 161),
+      ),
+      body: PDFViewer(
+        document: PDFDocument.fromURL(pdfUrl),
       ),
     );
   }

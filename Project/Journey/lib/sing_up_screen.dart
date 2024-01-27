@@ -51,7 +51,7 @@ Future<void> _createAccount() async {
   } catch (e) {
     if (e is FirebaseAuthException) {
       if (e.code == 'weak-password') {
-        showSnackbar('The password provided is too weak. Please choose a stronger password.');
+        showSnackbar('The password provided is too weak. Please choose a stronger password +8 ch.');
       } else if (e.code == 'email-already-in-use') {
         showSnackbar('The account already exists for that email. Please use a different email or login.');
       } else {

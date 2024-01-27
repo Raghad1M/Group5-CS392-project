@@ -5,7 +5,7 @@ import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 
 class AssignmentPage extends StatelessWidget {
-  final List<String> pdfFiles; // List of PDF file paths
+  final List<String> pdfFiles; 
 
   AssignmentPage({required this.pdfFiles});
 

@@ -127,3 +127,21 @@ class CourseContentScreen1 extends StatelessWidget {
     );
   }
 }
+
+class AssignmentsScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+
+  List<String> pdfFiles = ['assets/Tutorials.pdf', 'assets/Tutorials2.pdf'];
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Assignments"),
+      ),
+      body: Center(
+        child: Text("Assignments Screen"),
+      ),
+    );
+  }
+
+}
