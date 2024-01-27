@@ -1,5 +1,5 @@
 import 'package:Journey/course_content.dart';
-import 'package:Journey/disscusionBoard.dart';
+import 'package:Journey/disscusionBoard2.dart';
 import 'package:Journey/favpage.dart';
 import 'package:Journey/user_profile.dart';
 import 'package:flutter/material.dart';

@@ -1,14 +1,13 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart' show FirebaseFirestore, QuerySnapshot; // Import only the specific classes you need
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class YoutubeApiExample extends StatefulWidget {
   @override
   _YoutubeApiExampleState createState() => _YoutubeApiExampleState();
 }
-
 class _YoutubeApiExampleState extends State<YoutubeApiExample> {
   final String apiKey = 'api key '; 
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -125,16 +124,15 @@ class _YoutubeApiExampleState extends State<YoutubeApiExample> {
               'sentimentScore': sentimentScore,
             });
 
-            print('Storing good playlist: ${video['title']}');
+print('Storing good playlist: ${video['title'].toString()}');
           } else {
-            print('Skipping playlist due to low sentiment or missing thumbnail: ${video['title']}');
-          }
+print('Skipping playlist due to low sentiment or missing thumbnail: ${video['title'].toString()}');          }
         }
       }
 
-      print('Sentiment analysis update completed.');
+print('Sentiment analysis update completed.');
     } catch (e) {
-      print('Error updating playlist data: $e');
+print('Error updating playlist data: ${e.toString()}');
     }
   }
 
@@ -162,7 +160,7 @@ class _YoutubeApiExampleState extends State<YoutubeApiExample> {
     try {
       return await performSentimentAnalysis(text);
     } catch (e) {
-      print('Error in sentiment analysis: $e');
+print('Error in sentiment analysis: ${e.toString()}');
       return 0.0; // Default value in case of an error, assuming neutral sentiment
     }
   }
@@ -184,11 +182,11 @@ class _YoutubeApiExampleState extends State<YoutubeApiExample> {
         final Map<String, dynamic> data = json.decode(response.body);
         return data['documentSentiment']['score'].toDouble();
       } else {
-        print('Failed to analyze sentiment. Status code: ${response.statusCode}, Response body: ${response.body}');
+print('Failed to analyze sentiment. Status code: ${response.statusCode.toString()}, Response body: ${response.body.toString()}');
         return 0.0; // Default value in case of an error, assuming neutral sentiment
       }
     } catch (e) {
-      print('Error in analyzeSentiment: $e');
+print('Error in analyzeSentiment: ${e.toString()}');
       return 0.0; // Default value in case of an error, assuming neutral sentiment
     }
   }

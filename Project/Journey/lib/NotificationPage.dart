@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart';
 
 class NotificationPage extends StatelessWidget {
   static const platform = MethodChannel('your_channel_name');
@@ -11,7 +12,7 @@ class NotificationPage extends StatelessWidget {
         'body': 'You have a new notification!',
       });
     } on PlatformException catch (e) {
-      print('Failed to show notification: ${e.message}');
+      debugPrint('Failed to show notification: ${e.message}');
     }
   }
 

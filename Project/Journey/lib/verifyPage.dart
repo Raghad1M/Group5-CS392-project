@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-
 import 'otp.dart';
 
-class verifyPage extends StatefulWidget {
-  const verifyPage({Key? key}) : super(key: key);
+class VerifyPage extends StatefulWidget {
+  const VerifyPage({Key? key}) : super(key: key);
 
   @override
-  _verifyPageState createState() => _verifyPageState();
+  _VerifyPageState createState() => _VerifyPageState();
 }
 
-class _verifyPageState extends State<verifyPage> {
+class _VerifyPageState extends State<VerifyPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -115,9 +114,11 @@ class _verifyPageState extends State<verifyPage> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(builder: (context) => Otp()),
-                          );
+                         Navigator.of(context).push(
+  MaterialPageRoute(
+    builder: (context) => const Otp(), // Add 'const' before Otp()
+  ),
+);
                         },
                         style: ButtonStyle(
                           foregroundColor:

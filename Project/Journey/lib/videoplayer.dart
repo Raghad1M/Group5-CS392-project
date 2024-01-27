@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-
 class VideoListScreen extends StatefulWidget {
   @override
-  _VideoListScreenState createState() => _VideoListScreenState();
+  VideoListScreenState createState() => VideoListScreenState();
 }
 
-class _VideoListScreenState extends State<VideoListScreen> {
+class VideoListScreenState extends State<VideoListScreen> {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   late TextEditingController _searchController;
 
@@ -82,8 +81,7 @@ class _VideoListScreenState extends State<VideoListScreen> {
 
               return ListTile(
                 title: Text(video['title']),
-                subtitle:
-                    Text('Sentiment Score: ${video['sentimentScore']}'),
+                subtitle: Text('Sentiment Score: ${video['sentimentScore']}'),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -129,10 +127,10 @@ class FavoriteButton extends StatefulWidget {
   const FavoriteButton({Key? key, required this.itemIndex}) : super(key: key);
 
   @override
-  _FavoriteButtonState createState() => _FavoriteButtonState();
+  FavoriteButtonState createState() => FavoriteButtonState();
 }
 
-class _FavoriteButtonState extends State<FavoriteButton> {
+class FavoriteButtonState extends State<FavoriteButton> {
   bool isFavorite = false;
 
   @override

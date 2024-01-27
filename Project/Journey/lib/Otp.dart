@@ -4,10 +4,10 @@ class Otp extends StatefulWidget {
   const Otp({Key? key}) : super(key: key);
 
   @override
-  _OtpState createState() => _OtpState();
+  OtpState createState() => OtpState();
 }
 
-class _OtpState extends State<Otp> {
+class OtpState extends State<Otp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
