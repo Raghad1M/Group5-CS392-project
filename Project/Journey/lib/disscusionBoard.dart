@@ -7,8 +7,8 @@ import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:pdf/pdf.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:pdf_flutter/pdf_flutter.dart';
 
 import 'dart:io';
 
@@ -346,8 +346,6 @@ class _ForumScreenState extends State<ForumScreen> {
     );
   }
 }
-
-
 class PDFScreen extends StatelessWidget {
   final String pdfUrl;
 
@@ -360,9 +358,24 @@ class PDFScreen extends StatelessWidget {
         title: Text('PDF Viewer'),
         backgroundColor: Color.fromARGB(255, 150, 122, 161),
       ),
-      body: PDFViewer(
-        document: PDFDocument.fromURL(pdfUrl),
+      body: SafeArea(
+        child: _buildPdfViewer(),
       ),
     );
+  }
+
+  Widget _buildPdfViewer() {
+    try {
+return SfPdfViewer.network(
+  pdfUrl,
+
+);
+    } catch (e) {
+      print('Error loading PDF: $e');
+      // Handle the error as needed.
+      return Center(
+        child: Text('Error loading PDF'),
+      );
+    }
   }
 }

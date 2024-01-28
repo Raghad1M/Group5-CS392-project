@@ -23,33 +23,30 @@ class _VideoListScreenState3 extends State<VideoListScreen3> {
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 150, 122, 161),
         title: Text('Video List'),
-
       ),
       body: Column(
         children: [
-       Padding(
-  padding: const EdgeInsets.all(8.0),
-  child: TextField(
-    controller: _searchController,
-    onChanged: (query) {
-      setState(() {});
-    },
-    decoration: InputDecoration(
-      hintText: 'Search videos...',
-
-      suffixIcon: _searchController.text.isNotEmpty
-          ? IconButton(
-              icon: Icon(Icons.clear),
-              onPressed: () {
-                _searchController.clear();
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: _searchController,
+              onChanged: (query) {
                 setState(() {});
               },
-            )
-          : null,
-    ),
-  ),
-),
-
+              decoration: InputDecoration(
+                hintText: 'Search videos...',
+                suffixIcon: _searchController.text.isNotEmpty
+                    ? IconButton(
+                        icon: Icon(Icons.clear),
+                        onPressed: () {
+                          _searchController.clear();
+                          setState(() {});
+                        },
+                      )
+                    : null,
+              ),
+            ),
+          ),
           Expanded(
             child: _buildSearchResults(),
           ),
@@ -57,64 +54,68 @@ class _VideoListScreenState3 extends State<VideoListScreen3> {
       ),
     );
   }
-Widget _buildSearchResults() {
-  final String query = _searchController.text.toLowerCase();
 
-  return StreamBuilder(
-    stream: firestore.collection('database_videos').snapshots(),
-    builder: (context, snapshot) {
-      if (snapshot.connectionState == ConnectionState.waiting) {
-        return Center(child: CircularProgressIndicator());
-      } else if (snapshot.hasError) {
-        return Center(child: Text('Error: ${snapshot.error}'));
-      } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-        return Center(child: Text('No videos found.'));
-      } else {
-        final List<Map<String, dynamic>> filteredVideos = snapshot.data!.docs
-            .where((doc) => (doc['title'] as String).toLowerCase().contains(query))
-            .map((doc) => doc.data() as Map<String, dynamic>)
-            .toList();
+  Widget _buildSearchResults() {
+    final String query = _searchController.text.toLowerCase();
 
-        return ListView.builder(
-          itemCount: filteredVideos.length,
-          itemBuilder: (context, index) {
-            var video = filteredVideos[index];
+    return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+      stream: firestore.collection('database_videos').snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (snapshot.data == null || snapshot.data!.docs.isEmpty) {
+          return Center(child: Text('No videos found.'));
+        } else {
+          final List<QueryDocumentSnapshot<Map<String, dynamic>>> filteredVideos =
+              snapshot.data!.docs
+                  .where((doc) =>
+                      (doc['title'] as String).toLowerCase().contains(query))
+                  .toList();
 
-            return ListTile(
-              title: Text(video['title']),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Sentiment Score: ${video['sentimentScore']}'),
-                  SizedBox(height: 4),
+          return ListView.builder(
+            itemCount: filteredVideos.length,
+            itemBuilder: (context, index) {
+              var video = filteredVideos[index];
 
-                  if (video['thumbnailUrl'] != null && video['thumbnailUrl'].isNotEmpty)
-                    Image.network(video['thumbnailUrl'], height: 80, width: 120),
-                ],
-              ),
-              trailing: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => VideoPlayerScreen3(videoId: video['videoId']),
-                    ),
-                  );
-                },
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                    Color.fromARGB(255, 150, 122, 161),
-                  ),
+              return ListTile(
+                title: Text(video['title'] ?? ''),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Sentiment Score: ${video['sentimentScore']}'),
+                    SizedBox(height: 4),
+                    if (video['thumbnailUrl'] != null &&
+                        video['thumbnailUrl'].isNotEmpty)
+                      Image.network(video['thumbnailUrl'],
+                          height: 80, width: 120),
+                  ],
                 ),
-                child: Text('Play'),
-              ),
-            );
-          },
-        );
-      }
-    },
-  );
-}
+                trailing: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => VideoPlayerScreen3(
+                            videoId: video['videoId'] ?? ''),
+                      ),
+                    );
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                      Color.fromARGB(255, 150, 122, 161),
+                    ),
+                  ),
+                  child: Text('Play'),
+                ),
+              );
+            },
+          );
+        }
+      },
+    );
+  }
 
   @override
   void dispose() {
@@ -129,10 +130,10 @@ class VideoPlayerScreen3 extends StatefulWidget {
   VideoPlayerScreen3({required this.videoId});
 
   @override
-  _VideoPlayerScreenState2 createState() => _VideoPlayerScreenState2();
+  _VideoPlayerScreenState3 createState() => _VideoPlayerScreenState3();
 }
 
-class _VideoPlayerScreenState2 extends State<VideoPlayerScreen3> {
+class _VideoPlayerScreenState3 extends State<VideoPlayerScreen3> {
   late YoutubePlayerController _controller;
 
   @override
@@ -151,7 +152,6 @@ class _VideoPlayerScreenState2 extends State<VideoPlayerScreen3> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-
         backgroundColor: Color.fromARGB(255, 150, 122, 161),
         title: Text('Video Player'),
       ),

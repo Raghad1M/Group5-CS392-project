@@ -62,9 +62,9 @@ class CourseContentScreen1 extends StatelessWidget {
     case "Articles":
       screenToNavigate = ArticleList();
       break;
-    case "Assignments":
-      screenToNavigate = AssignmentsScreen();
-      break;
+    // case "Assignments":
+    //   screenToNavigate = AssignmentsScreen();
+    //   break;
     default:
       screenToNavigate = Container();
 
@@ -128,20 +128,20 @@ class CourseContentScreen1 extends StatelessWidget {
   }
 }
 
-class AssignmentsScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
+// class AssignmentsScreen extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
 
-  List<String> pdfFiles = ['assets/Tutorials.pdf', 'assets/Tutorials2.pdf'];
+//   List<String> pdfFiles = ['assets/Tutorials.pdf', 'assets/Tutorials2.pdf'];
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Assignments"),
-      ),
-      body: Center(
-        child: Text("Assignments Screen"),
-      ),
-    );
-  }
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text("Assignments"),
+//       ),
+//       body: Center(
+//         child: Text("Assignments Screen"),
+//       ),
+//     );
+//   }
 
-}
+// }

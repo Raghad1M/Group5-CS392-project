@@ -5,8 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 
+
 class SingUpScreen extends StatefulWidget {
-  const SingUpScreen({super.key, required this.controller});
+const SingUpScreen({Key? key, required this.controller}) : super(key: key);
   final PageController controller;
   @override
   State<SingUpScreen> createState() => _SingUpScreenState();

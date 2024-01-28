@@ -3,15 +3,18 @@ import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
-
 class AssignmentPage extends StatelessWidget {
-  final List<String> pdfFiles; 
+  final List<String> pdfFiles;
 
   AssignmentPage({required this.pdfFiles});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Assignment"),
+        backgroundColor: Color.fromARGB(255, 150, 122, 161),
+      ),
       body: ListView.builder(
         itemCount: pdfFiles.length,
         itemBuilder: (context, index) {
@@ -34,6 +37,7 @@ class AssignmentPage extends StatelessWidget {
     );
   }
 }
+
 
 
 class PDFViewerScreen extends StatelessWidget {

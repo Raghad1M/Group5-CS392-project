@@ -11,6 +11,7 @@ class FavoriteButton extends StatefulWidget {
   _FavoriteButtonState createState() => _FavoriteButtonState();
 }
 
+
 class _FavoriteButtonState extends State<FavoriteButton> {
   late User? _user;
   bool isFavorite = false;
@@ -21,16 +22,18 @@ class _FavoriteButtonState extends State<FavoriteButton> {
     _user = FirebaseAuth.instance.currentUser;
     _checkIsFavorite(); 
   }
+Future<void> _checkIsFavorite() async {
+  if (_user != null) {
+    String? title = widget.video['title'];
 
-  Future<void> _checkIsFavorite() async {
-    if (_user != null) {
-
-      bool result = await FavoriteItems.isFavoriteForUser(_user!.uid, widget.video['title']);
+    if (title != null) {
+      bool result = await FavoriteItems.isFavoriteForUser(_user!.uid, title);
       setState(() {
         isFavorite = result;
       });
     }
   }
+}
 
   @override
   Widget build(BuildContext context) {
