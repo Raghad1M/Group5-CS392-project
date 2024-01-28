@@ -1,3 +1,4 @@
+import 'package:Journey/assigmentPage.dart';
 import 'package:Journey/javaart.dart';
 import 'package:Journey/videoplayer.dart';
 import 'package:Journey/sentimentanalysis.dart';
@@ -48,7 +49,7 @@ class CourseContentScreen2 extends StatelessWidget {
 
   Widget _buildBox(BuildContext context, String title, Color color, {required String course}) {
     double boxWidth = MediaQuery.of(context).size.width / 2.5;
-
+    List<String> pdfFiles = ['assets/Tutorials.pdf', 'assets/Tutorials2.pdf'];
     Widget screenToNavigate;
 
     switch (title) {
@@ -61,9 +62,9 @@ class CourseContentScreen2 extends StatelessWidget {
     case "Articles":
       screenToNavigate = ArticleList();
       break;
-    // case "Assignments":
-    //   screenToNavigate = AssignmentsScreen();
-    //   break;
+    case "Assignments":
+      screenToNavigate = AssignmentPage(pdfFiles: pdfFiles,);
+      break;
     default:
       screenToNavigate = Container();
   }

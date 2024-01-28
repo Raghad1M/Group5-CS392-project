@@ -5,8 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 
+
 class SingUpScreen extends StatefulWidget {
-  const SingUpScreen({super.key, required this.controller});
+const SingUpScreen({Key? key, required this.controller}) : super(key: key);
   final PageController controller;
   @override
   State<SingUpScreen> createState() => _SingUpScreenState();
@@ -51,7 +52,7 @@ Future<void> _createAccount() async {
   } catch (e) {
     if (e is FirebaseAuthException) {
       if (e.code == 'weak-password') {
-        showSnackbar('The password provided is too weak. Please choose a stronger password.');
+        showSnackbar('The password provided is too weak. Please choose a stronger password +8 ch.');
       } else if (e.code == 'email-already-in-use') {
         showSnackbar('The account already exists for that email. Please use a different email or login.');
       } else {

@@ -208,7 +208,7 @@ class pop extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            SizedBox(height: 0,),
+            SizedBox(height: 300,),
             Text(
               'YOU HAVE TO LOGIN OR SIGN UP!',
               style: TextStyle(
