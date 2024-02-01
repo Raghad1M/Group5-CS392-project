@@ -91,7 +91,7 @@ class _VideoListScreenState2 extends State<VideoListScreen2> {
                 trailing: _FavoriteButton(
                   type: type,
                   title: video['title'] ?? '',
-                  url: video['url'] ?? '',
+                  url: video['videoId'] ?? '',
                   isVideoInFavorites: isVideoInFavorites,
                   addVideoToFavorites: addVideoToFavorites,
                 ),

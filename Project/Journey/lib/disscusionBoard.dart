@@ -80,7 +80,7 @@ class _ForumScreenState extends State<ForumScreen> {
         String fileName = doc.data()?.containsKey('fileName') == true ? doc['fileName'] : '';
         String fileExtension = doc.data()?.containsKey('fileExtension') == true ? doc['fileExtension'] : '';
         String downloadUrl = doc.data()?.containsKey('downloadUrl') == true ? doc['downloadUrl'] : '';
-
+        String parentId = doc.data()?.containsKey('parentId') == true ? doc['parentId'] : '';
         messages.add(Message(
           id: doc.id,
           content: doc['content'],
@@ -90,8 +90,9 @@ class _ForumScreenState extends State<ForumScreen> {
           fileName: fileName,
           fileExtension: fileExtension,
           downloadUrl: downloadUrl,
-          parentId: doc['parentId'] ?? '',
+          parentId: parentId,
         ));
+
       }
 
       return messages;
@@ -499,3 +500,4 @@ class PDFScreen extends StatelessWidget {
     }
   }
 }
+

@@ -1,4 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
+
+ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -91,7 +92,7 @@ class _VideoListScreenState4 extends State<VideoListScreen4> {
                 trailing: _FavoriteButton(
                   type: type,
                   title: video['title'] ?? '',
-                  url: video['url'] ?? '',
+                  url: video['videoId'] ?? '',
                   isVideoInFavorites: isVideoInFavorites,
                   addVideoToFavorites: addVideoToFavorites,
                 ),
@@ -257,13 +258,13 @@ class __FavoriteButtonState extends State<_FavoriteButton> {
                   color: isFavorite ? Colors.red : null,
                 ),
                 onPressed: () async {
-                  // Add await here
                   bool isFavorite = await widget.isVideoInFavorites(widget.type, widget.title, widget.url);
-                  widget.addVideoToFavorites(widget.type, {'title': widget.title, 'url': widget.url}, isFavorite);
+                  await widget.addVideoToFavorites(widget.type, {'title': widget.title, 'url': widget.url}, isFavorite);
                   setState(() {
                     _isFavorite = Future.value(!isFavorite);
                   });
                 },
+
               ),
               SizedBox(width: 8),
               ElevatedButton(
@@ -326,3 +327,5 @@ class _VideoPlayerScreenState4 extends State<VideoPlayerScreen4> {
     );
   }
 }
+
+
