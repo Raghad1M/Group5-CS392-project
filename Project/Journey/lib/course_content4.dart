@@ -5,6 +5,7 @@ import 'package:Journey/videoplayer4.dart';
 import 'package:flutter/material.dart'; 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:Journey/QuizApp.dart';
+import 'package:Journey/sweAssignment.dart';
 
 class CourseContentScreen4 extends StatelessWidget {
   const CourseContentScreen4({Key? key}) : super(key: key);
@@ -61,9 +62,9 @@ class CourseContentScreen4 extends StatelessWidget {
     case "Articles":
       screenToNavigate = ArticleList();
       break;
-    // case "Assignments":
-    //   screenToNavigate = AssignmentsScreen();
-    //   break;
+    case "Assignments":
+     screenToNavigate = AssignmentPageswe();
+    break;
     default:
       screenToNavigate = Container();
   }

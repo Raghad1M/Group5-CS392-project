@@ -48,7 +48,7 @@ class CourseContentScreen extends StatelessWidget {
   } 
  Widget _buildBox(BuildContext context, String title, Color color) {
   double boxWidth = MediaQuery.of(context).size.width / 2.5;
-  List<String> pdfFiles = ['assets/Tutorials.pdf', 'assets/Tutorials2.pdf'];
+  //List<String> pdfFiles = ['assets/Tutorials.pdf', 'assets/Tutorials2.pdf'];
   Widget screenToNavigate;
 
   switch (title) {
@@ -62,7 +62,7 @@ class CourseContentScreen extends StatelessWidget {
       screenToNavigate = ArticlesScreen();
       break;
     case "Assignments":
-      screenToNavigate = AssignmentPage(pdfFiles: pdfFiles,);
+      screenToNavigate = AssignmentPage();
       break;
     default:
       screenToNavigate = Container();
