@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -68,19 +69,14 @@ class _VideoListScreenState3 extends State<VideoListScreen3> {
         } else if (snapshot.data == null || snapshot.data!.docs.isEmpty) {
           return Center(child: Text('No videos found.'));
         } else {
-          final List<QueryDocumentSnapshot<Map<String, dynamic>>> filteredVideos =
-              snapshot.data!.docs
-                  .where((doc) =>
-                      (doc['title'] as String).toLowerCase().contains(query))
-                  .toList();
-
           return ListView.builder(
-            itemCount: filteredVideos.length,
+            itemCount: snapshot.data!.docs.length,
             itemBuilder: (context, index) {
-              var video = filteredVideos[index];
+              var video = snapshot.data!.docs[index].data() as Map<String, dynamic>;
+              String type = 'video';
 
               return ListTile(
-                title: Text(video['title'] ?? ''),
+                title: Text(video['title']),
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -92,22 +88,12 @@ class _VideoListScreenState3 extends State<VideoListScreen3> {
                           height: 80, width: 120),
                   ],
                 ),
-                trailing: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => VideoPlayerScreen3(
-                            videoId: video['videoId'] ?? ''),
-                      ),
-                    );
-                  },
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(
-                      Color.fromARGB(255, 150, 122, 161),
-                    ),
-                  ),
-                  child: Text('Play'),
+                trailing: _FavoriteButton(
+                  type: type,
+                  title: video['title'] ?? '',
+                  url: video['url'] ?? '',
+                  isVideoInFavorites: isVideoInFavorites,
+                  addVideoToFavorites: addVideoToFavorites,
                 ),
               );
             },
@@ -117,12 +103,188 @@ class _VideoListScreenState3 extends State<VideoListScreen3> {
     );
   }
 
+  Future<bool> isVideoInFavorites(String type, String title, String url) async {
+    try {
+      FirebaseAuth _auth = FirebaseAuth.instance;
+      User? user = _auth.currentUser;
+      String userId = user?.uid ?? "";
+
+      DocumentReference userFavoriteRef =
+          firestore.collection('userFavorites').doc(userId);
+
+      DocumentSnapshot<Map<String, dynamic>> userFavoritesSnapshot =
+          await userFavoriteRef.get() as DocumentSnapshot<Map<String, dynamic>>;
+
+      if (userFavoritesSnapshot.exists) {
+        List<Map<String, dynamic>> favoriteVideos =
+            List.from(userFavoritesSnapshot.data()?['favorites'] ?? []);
+
+        return favoriteVideos.any(
+          (Map<String, dynamic> video) =>
+              video.containsKey('type') &&
+              video.containsKey('title') &&
+              video.containsKey('url') &&
+              video['type'] == type &&
+              video['title'] == title &&
+              video['url'] == url,
+        );
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+    return false;
+  }
+
+  void addVideoToFavorites(String type, Map<String, dynamic> video, bool isFavorite) async {
+    try {
+      FirebaseAuth _auth = FirebaseAuth.instance;
+      User? user = _auth.currentUser;
+      String userId = user?.uid ?? "";
+
+      DocumentReference userFavoriteRef =
+          firestore.collection('userFavorites').doc(userId);
+
+      DocumentSnapshot<Map<String, dynamic>> userFavoritesSnapshot =
+          await userFavoriteRef.get() as DocumentSnapshot<Map<String, dynamic>>;
+
+      if (userFavoritesSnapshot.exists) {
+        List<Map<String, dynamic>> favoriteVideos =
+            List.from(userFavoritesSnapshot.data()?['favorites'] ?? []);
+
+        // Check if the video is NOT already in favorites
+        if (!isFavorite) {
+          favoriteVideos.add({'type': type, ...video});
+          await userFavoriteRef.set({'favorites': favoriteVideos});
+        }
+      } else {
+        await userFavoriteRef.set({
+          'favorites': [
+            {'type': type, ...video}
+          ]
+        });
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
   @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
   }
 }
+class _FavoriteButton extends StatefulWidget {
+  final String type;
+  final String title;
+  final String url;
+  final Function(String, String, String) isVideoInFavorites;
+  final Function(String, Map<String, dynamic>, bool) addVideoToFavorites;
+
+  _FavoriteButton({
+    required this.type,
+    required this.title,
+    required this.url,
+    required this.isVideoInFavorites,
+    required this.addVideoToFavorites,
+  });
+
+  @override
+  __FavoriteButtonState createState() => __FavoriteButtonState();
+}
+class __FavoriteButtonState extends State<_FavoriteButton> {
+  late Future<bool> _isFavorite;
+
+  @override
+  void initState() {
+    super.initState();
+    _isFavorite = widget.isVideoInFavorites(widget.type, widget.title, widget.url);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<bool>(
+      future: _isFavorite,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          // return a loading indicator or default icon
+          return Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.favorite_border),
+              SizedBox(width: 8),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => VideoPlayerScreen3(videoId: widget.url),
+                    ),
+                  );
+                },
+                child: Text('Play'),
+              ),
+            ],
+          );
+        } else if (snapshot.hasError) {
+          return Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.favorite_border),
+              SizedBox(width: 8),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => VideoPlayerScreen3(videoId: widget.url),
+                    ),
+                  );
+                },
+                child: Text('Play'),
+              ),
+            ],
+          );
+        } else {
+          bool isFavorite = snapshot.data ?? false;
+
+          return Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                icon: Icon(
+                  isFavorite ? Icons.favorite : Icons.favorite_border,
+                  color: isFavorite ? Colors.red : null,
+                ),
+                onPressed: () async {
+                  // Add await here
+                  bool isFavorite = await widget.isVideoInFavorites(widget.type, widget.title, widget.url);
+                  widget.addVideoToFavorites(widget.type, {'title': widget.title, 'url': widget.url}, isFavorite);
+                  setState(() {
+                    _isFavorite = Future.value(!isFavorite);
+                  });
+                },
+              ),
+              SizedBox(width: 8),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => VideoPlayerScreen3(videoId: widget.url),
+                    ),
+                  );
+                },
+                child: Text('Play'),
+              ),
+            ],
+          );
+        }
+      },
+    );
+  }
+}
+
 
 class VideoPlayerScreen3 extends StatefulWidget {
   final String videoId;
@@ -155,9 +317,11 @@ class _VideoPlayerScreenState3 extends State<VideoPlayerScreen3> {
         backgroundColor: Color.fromARGB(255, 150, 122, 161),
         title: Text('Video Player'),
       ),
-      body: YoutubePlayer(
-        controller: _controller,
-        showVideoProgressIndicator: true,
+      body: Center(
+        child: YoutubePlayer(
+          controller: _controller,
+          showVideoProgressIndicator: true,
+        ),
       ),
     );
   }

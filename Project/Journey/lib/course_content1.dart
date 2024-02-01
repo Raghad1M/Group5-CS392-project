@@ -1,3 +1,4 @@
+import 'package:Journey/QuizS.dart';
 import 'package:Journey/course_content.dart';
 import 'package:Journey/osart.dart';
 import 'package:Journey/videoplayer.dart';
@@ -5,7 +6,7 @@ import 'package:Journey/sentimentanalysis.dart';
 import 'package:Journey/videoplayer2.dart';
 import 'package:flutter/material.dart'; 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:Journey/QuizApp.dart';
+import 'package:Journey/QuizOS.dart';
 import 'package:Journey/osAssignment.dart';
 
 class CourseContentScreen1 extends StatelessWidget {
@@ -58,7 +59,7 @@ class CourseContentScreen1 extends StatelessWidget {
         screenToNavigate = VideoListScreen2();
         break;
     case "Quizzes":
-      screenToNavigate = QuizPage();
+      screenToNavigate = QuizPageOS();
       break;
     case "Articles":
       screenToNavigate = ArticleList();

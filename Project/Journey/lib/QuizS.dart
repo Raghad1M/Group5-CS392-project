@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:Journey/NotificationPage.dart';
 
@@ -13,13 +15,16 @@ class Question {
   });
 }
 
-class QuizPage extends StatefulWidget {
+class QuizPageS extends StatefulWidget {
 
   @override
   _QuizPageState createState() => _QuizPageState();
 }
 
-class _QuizPageState extends State<QuizPage> {
+
+class _QuizPageState extends State<QuizPageS> {
+  final CollectionReference achievementsCollection =
+      FirebaseFirestore.instance.collection('achievements');
       Achievement? _achievement;
 
   int _currentQuestionIndex = 0;
@@ -123,34 +128,17 @@ class _QuizPageState extends State<QuizPage> {
     });
   }
 
-  //   void showAchievementPopup() {
-  //   showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return AlertDialog(
-  //         title: Text('Congratulations!'),
-  //         content: Text('You have earned an achievement for a perfect score!'),
-  //         actions: [
-  //           TextButton(
-  //             onPressed: () {
-  //               Navigator.of(context).pop();
-  //               navigateToNotificationPage();
-  //             },
-  //             child: Text('View Achievement'),
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
   void showAchievementPopup() {
     setState(() {
       _achievement = Achievement(
         title: 'Perfect Score',
-        description: 'Congratulations! You achieved a perfect score!',
+        description: 'Congratulations! You achieved a perfect score in Software engineering!',
         imagePath: 'images/Winnersi.png',
       );
     });
+
+    storeAchievementInFirestore(_achievement!, getCurrentUserId()); 
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -171,27 +159,36 @@ class _QuizPageState extends State<QuizPage> {
     );
   }
 
+  void storeAchievementInFirestore(Achievement achievement, String userId) {
+    achievementsCollection.add({
+      'userId': userId,
+      'title': achievement.title,
+      'description': achievement.description,
+      'imagePath': achievement.imagePath,
+      'timestamp': FieldValue.serverTimestamp(),
+    }).then((value) {
+      print('Achievement added successfully!');
+    }).catchError((error) {
+      print('Error adding achievement: $error');
+    });
+  }
+
+  String getCurrentUserId() {
+    User? user = FirebaseAuth.instance.currentUser;
+    return user?.uid ?? ''; 
+  }
+
+
   void navigateToNotificationPage() {
     if (_achievement != null) {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => NotificationPage(achievement: _achievement!),
+          builder: (context) => AchievementsPage(),
         ),
       );
     }
-//     Navigator.push(
-//       context,
-//       MaterialPageRoute(
-//         builder: (context) => NotificationPage(
-//           achievement: Achievement(
-//             title: 'Quiz Master',
-//             description: 'You scored 100% on the quiz!',
-// imagePath: 'images/Winnersi.png',
-//           ),
-//         ),
-//       ),
-//     );
+
   }
 
 

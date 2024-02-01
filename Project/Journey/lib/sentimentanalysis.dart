@@ -67,7 +67,7 @@ class _YoutubeApiExampleState extends State<YoutubeApiExample> {
         print('Video Title: $videoTitle');
 
         if (sentimentScore > 0.1 && isValidUrl(thumbnailUrl) && videoTitle != null) {
-          await firestore.collection('swe_videos').add({
+          await firestore.collection('java_videos').add({
             'title': videoTitle,
             'videoId': video['videoId'],
             'videoTitle': videoTitle,
@@ -89,14 +89,14 @@ class _YoutubeApiExampleState extends State<YoutubeApiExample> {
   }
 Future<void> updatePlaylistData() async {
   try {
-    List<String> playlistIds = await searchPlaylists('Software engineering');
+    List<String> playlistIds = await searchPlaylists('introduction to programming java');
     print('Playlist IDs: $playlistIds');
 
     List<Map<String, dynamic>> newVideos = await fetchVideos(playlistIds);
 
     for (var video in newVideos) {
       bool videoExists = await firestore
-          .collection('database_videos') 
+          .collection('java_videos') 
           .where('videoId', isEqualTo: video['videoId'])
           .get()
           .then((querySnapshot) => querySnapshot.docs.isNotEmpty);
@@ -111,7 +111,7 @@ Future<void> updatePlaylistData() async {
         print('Video Title: $videoTitle');
 
         if (sentimentScore > 0.1 && isValidUrl(thumbnailUrl) && videoTitle.isNotEmpty) {
-          await firestore.collection('swe_videos').add({
+          await firestore.collection('java_videos').add({
             'title': videoTitle,
             'videoId': video['videoId'],
             'videoTitle': videoTitle,

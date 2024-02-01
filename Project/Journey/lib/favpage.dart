@@ -1,7 +1,6 @@
-import 'package:Journey/NotificationPage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:Journey/QuizApp.dart';
 
 class FavoritePage extends StatefulWidget {
   @override
@@ -10,48 +9,75 @@ class FavoritePage extends StatefulWidget {
 
 class _FavoritePageState extends State<FavoritePage> with SingleTickerProviderStateMixin {
   TabController? _tabController;
-  List<String> favorites = [];
-  List<String> filteredFavorites = [];
+  List<Map<String, dynamic>> favorites = [];
+  List<Map<String, dynamic>> filteredFavorites = [];
   String searchText = '';
 
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 4, vsync: this);
-    _tabController!.addListener(_handleTabChange);
-    _fetchFavorites(); // Fetch favorites when the page is initialized
-  }
+@override
+void initState() {
+  super.initState();
+  _tabController = TabController(length: 4, vsync: this);
+  _tabController!.addListener(_handleTabChange);
+  _fetchFavorites(); 
+}void _handleTabChange() {
+  setState(() {
+    List<Map<String, dynamic>> searchTextFiltered = favorites
+        .where((favorite) =>
+            favorite['title'].toLowerCase().contains(searchText.toLowerCase()))
+        .toList();
 
-  void _handleTabChange() {
-    setState(() {
-      switch (_tabController!.index) {
-        case 0:
-          filteredFavorites = favorites;
-          break;
-        case 1:
-          filteredFavorites = favorites.where((favorite) => favorite.contains('video')).toList();
-          break;
-        case 2:
-          filteredFavorites = favorites.where((favorite) => favorite.contains('article')).toList();
-          break;
-        case 3:
-          filteredFavorites = favorites.where((favorite) => favorite.contains('book')).toList();
-          break;
+    print('Search text filtered count: ${searchTextFiltered.length}');
+
+    switch (_tabController!.index) {
+      case 0:
+        filteredFavorites = searchTextFiltered;
+        break;
+      case 1:
+        filteredFavorites = searchTextFiltered.where((favorite) => favorite['type'] == 'video').toList();
+        break;
+      case 2:
+        filteredFavorites = searchTextFiltered.where((favorite) => favorite['type'] == 'article').toList();
+        break;
+      case 3:
+        filteredFavorites = searchTextFiltered.where((favorite) => favorite['type'] == 'assignment').toList();
+        break;
+    }
+
+    print('Filtered favorites count: ${filteredFavorites.length}');
+  });
+}
+Future<void> _fetchFavorites() async {
+  try {
+    FirebaseAuth _auth = FirebaseAuth.instance;
+    User? user = _auth.currentUser;
+
+    if (user != null) {
+      String userId = user.uid;
+      DocumentSnapshot<Object?> userSnapshot =
+          await FirebaseFirestore.instance.collection('userFavorites').doc(userId).get();
+
+      if (userSnapshot.exists) {
+        Map<String, dynamic>? userData = userSnapshot.data() as Map<String, dynamic>?;
+
+        if (userData != null) {
+          List<Map<String, dynamic>> userFavorites = List.from(userData['favorites'] ?? [])
+              .map((fav) => fav as Map<String, dynamic>)
+              .toList();
+
+          print('Fetched favorites: $userFavorites');
+
+          setState(() {
+            favorites = userFavorites;
+            _handleTabChange();
+          });
+        }
       }
-    });
+    }
+  } catch (e) {
+    print('Error fetching favorites: $e');
   }
+}
 
-  void _fetchFavorites() async {
-    // Fetch favorites from the database (Firestore)
-    CollectionReference favoritesCollection = FirebaseFirestore.instance.collection('favorites');
-    QuerySnapshot querySnapshot = await favoritesCollection.get();
-
-    setState(() {
-      // Update the favorites list
-      favorites = querySnapshot.docs.map((doc) => doc['title'] as String).toList();
-      _handleTabChange(); // Update the filteredFavorites based on the current tab
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +85,7 @@ class _FavoritePageState extends State<FavoritePage> with SingleTickerProviderSt
       appBar: AppBar(
         title: Text('Favorites'),
         backgroundColor: Color.fromARGB(255, 150, 122, 161),
-              automaticallyImplyLeading: false,
+        automaticallyImplyLeading: false,
         bottom: TabBar(
           controller: _tabController,
           tabs: [
@@ -69,19 +95,6 @@ class _FavoritePageState extends State<FavoritePage> with SingleTickerProviderSt
             Tab(text: 'Books'),
           ],
         ),
-        actions: [
-//           IconButton(
-//             icon: Icon(Icons.notifications),
-//             onPressed: () {
-//               Navigator.push(
-//   context,
-//   MaterialPageRoute(
-//     builder: (context) => NotificationPage(achievement: myAchievement),
-//   ),
-// );
-//             },
-//           ),
-        ],
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,16 +115,22 @@ class _FavoritePageState extends State<FavoritePage> with SingleTickerProviderSt
               },
             ),
           ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: filteredFavorites.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(filteredFavorites[index]),
-                );
-              },
-            ),
-          ),
+                      Builder(
+                builder: (context) => Expanded(
+                  child: ListView.builder(
+                    itemCount: filteredFavorites.length,
+                    itemBuilder: (context, index) {
+                      print('Item count: ${filteredFavorites.length}');
+                      return ListTile(
+                        title: Text(filteredFavorites[index]['title'] ?? ''),
+                        subtitle: Text(filteredFavorites[index]['type'] ?? ''),
+                      );
+                    },
+                  ),
+                ),
+              ),
+
+
         ],
       ),
     );

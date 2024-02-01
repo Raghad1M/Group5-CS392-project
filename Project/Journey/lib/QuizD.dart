@@ -1,5 +1,19 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:Journey/NotificationPage.dart';
+
+class Achievement {
+  final String title;
+  final String description;
+  final String imagePath;
+
+  Achievement({
+    required this.title,
+    required this.description,
+    required this.imagePath,
+  });
+}
 
 class Question {
   final String question;
@@ -13,12 +27,14 @@ class Question {
   });
 }
 
-class QuizPage extends StatefulWidget {
+class QuizPageDatabases extends StatefulWidget {
   @override
   _QuizPageState createState() => _QuizPageState();
 }
 
-class _QuizPageState extends State<QuizPage> {
+class _QuizPageState extends State<QuizPageDatabases> {
+  final CollectionReference achievementsCollection =
+      FirebaseFirestore.instance.collection('achievements');
   Achievement? _achievement;
 
   int _currentQuestionIndex = 0;
@@ -122,34 +138,17 @@ class _QuizPageState extends State<QuizPage> {
     });
   }
 
-  //   void showAchievementPopup() {
-  //   showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return AlertDialog(
-  //         title: Text('Congratulations!'),
-  //         content: Text('You have earned an achievement for a perfect score!'),
-  //         actions: [
-  //           TextButton(
-  //             onPressed: () {
-  //               Navigator.of(context).pop();
-  //               navigateToNotificationPage();
-  //             },
-  //             child: Text('View Achievement'),
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
   void showAchievementPopup() {
     setState(() {
       _achievement = Achievement(
         title: 'Perfect Score',
-        description: 'Congratulations! You achieved a perfect score!',
-        imagePath: 'images/Winnersi.png',
+        description: 'Congratulations! You achieved a perfect score in Databases!',
+        imagePath: 'images/Winners-pana.png',
       );
     });
+
+    storeAchievementInFirestore(_achievement!, getCurrentUserId());
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -170,27 +169,36 @@ class _QuizPageState extends State<QuizPage> {
     );
   }
 
+  Future<void> storeAchievementInFirestore(
+      Achievement achievement, String userId) async {
+    try {
+      await achievementsCollection.add({
+        'userId': userId,
+        'title': achievement.title,
+        'description': achievement.description,
+        'imagePath': achievement.imagePath,
+        'timestamp': FieldValue.serverTimestamp(),
+      });
+      print('Achievement added successfully!');
+    } catch (error) {
+      print('Error adding achievement: $error');
+    }
+  }
+
+  String getCurrentUserId() {
+    User? user = FirebaseAuth.instance.currentUser;
+    return user?.uid ?? '';
+  }
+
   void navigateToNotificationPage() {
     if (_achievement != null) {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => NotificationPage(achievement: _achievement!),
+          builder: (context) => AchievementsPage(),
         ),
       );
     }
-//     Navigator.push(
-//       context,
-//       MaterialPageRoute(
-//         builder: (context) => NotificationPage(
-//           achievement: Achievement(
-//             title: 'Quiz Master',
-//             description: 'You scored 100% on the quiz!',
-// imagePath: 'images/Winnersi.png',
-//           ),
-//         ),
-//       ),
-//     );
   }
 
   Widget _buildResultPage() {
@@ -222,6 +230,10 @@ class _QuizPageState extends State<QuizPage> {
     );
   }
 }
+
+
+
+  
 
 class QuizContent extends StatefulWidget {
   final Question question;

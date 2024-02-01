@@ -38,28 +38,13 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_lints: ^2.0.0
   flutter_launcher_icons: "^0.13.1"
 
-flutter_launcher_icons:
-  android: "launcher_icon"
-  ios: true
+flutter_icons:
   image_path: "images/logo.png"
-  min_sdk_android: 120 # android min sdk min:16, default 21
-  web:
-    generate: true
-    image_path: "images/logo.png"
-    background_color: "#hexcode"
-    theme_color: "#hexcode"
-  windows:
-    generate: true
-    image_path: "images/logo.png"
-    icon_size: 160 # min:48, max:256, default: 48
-  macos:
-    generate: true
-    image_path: "images/logo.png"
-
-  flutter_lints: ^2.0.0
-
+  android: true 
+  ios: true
 flutter:
 
 
@@ -73,8 +58,10 @@ flutter:
     - images/ossoso.jpg
     - images/swee.png
 
-    - images\Winnersi.png
-
+    - images/Winnersi.png
+    - images/Winners-pana.png
+    - images/Winners-amico.png
+    - images/Winners-cuate.png
     - assets/Tutorials.pdf
     - assets/Tutorials2.pdf
     

@@ -59,7 +59,7 @@ class CourseContentScreen3 extends StatelessWidget {
         screenToNavigate = VideoListScreen3();
         break;
     case "Quizzes":
-      screenToNavigate = QuizPage();
+      screenToNavigate = QuizPageDatabases();
       break;
     case "Articles":
       screenToNavigate = ArticleList();

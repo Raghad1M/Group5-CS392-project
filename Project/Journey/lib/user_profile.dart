@@ -54,50 +54,53 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(height: 10.0),
-            Image(image:AssetImage('images/Ppic.png'), 
-            ),
-            const SizedBox(height: 20.0),
-            const SizedBox(height: 20.0),
-            _buildEditableField(
-              controller: _nameController,
-              label: 'Name',
-            ),
-            const SizedBox(height: 20.0),
-            _buildEditableField(
-              controller: _emailController,
-              label: 'Email',
-            ),
-            const SizedBox(height: 20.0),
-            if (_isEditing) ...[
-              _buildPasswordFields(),
-              const SizedBox(height: 20.0),
-              _buildSaveButton(),
-            ],
-            if (!_isEditing)
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    _isEditing = true;
-                  });
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color.fromARGB(255, 150, 122, 161),
-                  padding: EdgeInsets.symmetric(horizontal: 100, vertical: 15),
-                ),
-                child: const Text('Edit information'),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(height: 10.0),
+              Image(
+                image: AssetImage('images/Ppic.png'),
               ),
-          ],
+              const SizedBox(height: 20.0),
+              const SizedBox(height: 20.0),
+              _buildEditableField(
+                controller: _nameController,
+                label: 'Name',
+              ),
+              const SizedBox(height: 20.0),
+              _buildEditableField(
+                controller: _emailController,
+                label: 'Email',
+              ),
+              const SizedBox(height: 20.0),
+              if (_isEditing) ...[
+                _buildPasswordFields(),
+                const SizedBox(height: 20.0),
+                _buildSaveButton(),
+              ],
+              if (!_isEditing)
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      _isEditing = true;
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color.fromARGB(255, 150, 122, 161),
+                    padding: EdgeInsets.symmetric(horizontal: 100, vertical: 15),
+                  ),
+                  child: const Text('Edit information'),
+                ),
+            ],
+          ),
         ),
       ),
     );
   }
-
+  
   Widget _buildEditableField({
     required TextEditingController controller,
     required String label,

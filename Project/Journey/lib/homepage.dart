@@ -36,22 +36,22 @@ class _HomePageState extends State<HomePage> {
   List<Course> courses = [
     Course(
       name: 'Operating system',
-      university: 'Imamu',
+      university: 'IMISU',
       image: 'images/ossoso.jpg',
     ),
     Course(
       name: 'Java 1',
-      university: 'Imamu',
+      university: 'IMISU',
       image: 'images/javajvajva.png',
     ),
     Course(
       name: 'Database',
-      university: 'Imamu',
+      university: 'IMISU',
       image: 'images/datdatdtdat.png',
     ),
     Course(
       name: 'Software engineering',
-      university: 'Imamu',
+      university: 'IMISU',
       image: 'images/swee.png',
     ),
   ];
@@ -96,10 +96,11 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+
   Widget _buildHomePage() {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home page'),
+        title: Text('Home'),
         automaticallyImplyLeading: false,
         backgroundColor: Color.fromARGB(255, 150, 122, 161),
         actions: [
@@ -109,7 +110,7 @@ class _HomePageState extends State<HomePage> {
 Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (BuildContext context) => NotificationPage(),
+                              builder: (BuildContext context) => AchievementsPage(),
                               ),
                         );          
                         },
@@ -134,11 +135,11 @@ Navigator.push(
               itemCount: filteredCourses.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
+                childAspectRatio: 1.2,  // Adjusted aspect ratio
               ),
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
-
                     switch (filteredCourses[index].name) {
                       case 'Operating system':
                         Navigator.push(
@@ -158,10 +159,10 @@ Navigator.push(
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>  CourseContentScreen3()),
+                              builder: (context) => CourseContentScreen3()),
                         );
                         break;
-                        case 'Software engineering':
+                      case 'Software engineering':
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -169,7 +170,6 @@ Navigator.push(
                         );
                         break;
                       default:
-
                     }
                   },
                   child: Card(
@@ -179,28 +179,29 @@ Navigator.push(
                         Text(
                           filteredCourses[index].name,
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 16,
                             fontFamily: 'Poppins',
                           ),
                         ),
-                        SizedBox(height: 8),
+                        SizedBox(height: 4),
                         Image.asset(
                           filteredCourses[index].image,
-                          width: 150,
-                          height: 90,
+                          width: 100,
+                          height: 60,
                         ),
-                        SizedBox(height: 8),
+                        SizedBox(height: 4),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
                               Icons.school_rounded,
                               color: Color.fromARGB(255, 150, 122, 161),
+                              size: 16,
                             ),
-                            SizedBox(width: 4),
+                            SizedBox(width: 2),
                             Text(
                               filteredCourses[index].university,
-                              style: TextStyle(fontSize: 16),
+                              style: TextStyle(fontSize: 14),
                             ),
                           ],
                         ),
@@ -213,8 +214,8 @@ Navigator.push(
           ),
         ],
       ),
-    );
-  }
+);  }
+
 
   @override
   Widget build(BuildContext context) {

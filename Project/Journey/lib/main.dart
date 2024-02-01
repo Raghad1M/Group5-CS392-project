@@ -52,8 +52,8 @@ class FirstPage extends StatelessWidget {
             children: [
               Image.asset(
                 'images/FirstPage.png',
-                height: 400,
-                width: 280,
+                height: 300,
+                width: 180,
               ),
               Expanded(
                 child: Padding(
@@ -64,20 +64,20 @@ class FirstPage extends StatelessWidget {
                         'Start your Journey ',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: 30, fontStyle: FontStyle.italic),
+                            fontSize: 25, fontStyle: FontStyle.italic),
                       ),
                       const SizedBox(height: 15),
                       const Text(
                         'Ready to embark on a Journey for inspiration and knowledge? Your adventure begins now. Let\'s go!',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 10,
                             color: Color.fromARGB(255, 118, 117,
                                 117)
                             ),
                       ),
                       const SizedBox(
-                          height: 90), 
+                          height: 50), 
                       ElevatedButton(
                         onPressed: () {
                           PageController controllerInstance = PageController();
@@ -98,8 +98,8 @@ class FirstPage extends StatelessWidget {
                           foregroundColor:
                               const Color.fromARGB(255, 245, 230, 232),
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 100,
-                              vertical: 15), 
+                              horizontal: 80,
+                              vertical: 5), 
                         ),
                         child: const Text('Let\'s get started'),
                       ),
@@ -124,8 +124,8 @@ class FirstPage extends StatelessWidget {
                           foregroundColor:
                               const Color.fromARGB(255, 150, 122, 161),
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 130,
-                              vertical: 15),
+                              horizontal: 110,
+                              vertical: 5),
                         ),
                         child: const Text('Sign in'),
                       ),
