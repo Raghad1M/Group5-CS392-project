@@ -5,7 +5,7 @@ import 'package:Journey/videoplayer3.dart';
 import 'package:flutter/material.dart'; 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:Journey/QuizApp.dart';
+import 'package:Journey/QuizD.dart';
 import 'package:Journey/databaesAssignment.dart';
 
 
