@@ -7,7 +7,8 @@ import 'package:Journey/favpage.dart';
 import 'package:Journey/sentimentanalysis.dart';
 import 'package:Journey/user_profile.dart';
 import 'package:flutter/material.dart';
-import 'package:Journey/NotificationPage.dart';
+import 'NotificationPage.dart'; // Import the NotificationPage file
+import 'NavigationHelper.dart';
 
 class Course {
   final String name;
@@ -104,13 +105,13 @@ class _HomePageState extends State<HomePage> {
           IconButton(
             icon: Icon(Icons.notifications),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (BuildContext context) => NotificationPage(),
-                ),
-              );
-            },
+Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) => NotificationPage(),
+                              ),
+                        );          
+                        },
           ),
         ],
       ),
