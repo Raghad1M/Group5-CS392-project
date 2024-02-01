@@ -4,11 +4,11 @@ import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart'; 
 import 'package:firebase_storage/firebase_storage.dart'; 
  
-class ArticleList extends StatefulWidget { 
+class AssignmentPageos extends StatefulWidget { 
   @override 
   _FileListPageState createState() => _FileListPageState(); 
 } 
-class _FileListPageState extends State<ArticleList> { 
+class _FileListPageState extends State<AssignmentPageos > { 
   final FirebaseStorage storage = FirebaseStorage.instance; 
   late List<Reference> fileList; 
  
@@ -20,7 +20,7 @@ class _FileListPageState extends State<ArticleList> {
   } 
  
   Future<void> fetchFileList() async { 
-    Reference ref = storage.ref('articles/operating systems/'); 
+    Reference ref = storage.ref('assignments/database/'); 
     ListResult result = await ref.list(); 
  
     setState(() { 
@@ -32,7 +32,7 @@ class _FileListPageState extends State<ArticleList> {
   Widget build(BuildContext context) { 
     return Scaffold( 
       appBar: AppBar( 
-        title: Text('Articles'), 
+        title: Text('Assignments'), 
          backgroundColor: Color.fromARGB(255, 150, 122, 161),
       ), 
       body: fileList.isEmpty 
