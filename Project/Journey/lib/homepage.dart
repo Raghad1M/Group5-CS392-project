@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'NotificationPage.dart'; // Import the NotificationPage file
 import 'NavigationHelper.dart';
 
+
 class Course {
   final String name;
   final String university;

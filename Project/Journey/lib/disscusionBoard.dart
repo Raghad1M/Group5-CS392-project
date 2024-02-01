@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:pdf/pdf.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+import 'package:pdf/widgets.dart' as pw;
+
 import 'dart:io';
 
 bool isUserAuthenticated() {
@@ -18,7 +25,7 @@ class Message {
   final Timestamp timestamp;
   String fileName;
   String fileExtension;
-  String filePath;
+  String downloadUrl;
 
   Message({
     required this.id,
@@ -28,7 +35,7 @@ class Message {
     required this.timestamp,
     required this.fileName,
     required this.fileExtension,
-    required this.filePath,
+    required this.downloadUrl,
   });
 }
 
@@ -51,7 +58,7 @@ class _ForumScreenState extends State<ForumScreen> {
 
       for (var doc in snapshot.docs) {
         String senderId = doc['senderId'] ?? '';
-        String senderName = doc["senderName"]??'';
+        String senderName = doc["senderName"] ?? '';
 
         if (senderId.isNotEmpty) {
           try {
@@ -70,7 +77,7 @@ class _ForumScreenState extends State<ForumScreen> {
 
         String fileName = doc['fileName'] ?? '';
         String fileExtension = doc['fileExtension'] ?? '';
-        String filePath = doc['filePath'] ?? '';
+        String downloadUrl = doc['downloadUrl'] ?? '';
 
         messages.add(Message(
           id: doc.id,
@@ -80,7 +87,7 @@ class _ForumScreenState extends State<ForumScreen> {
           timestamp: timestamp,
           fileName: fileName,
           fileExtension: fileExtension,
-          filePath: filePath,
+          downloadUrl: downloadUrl,
         ));
       }
 
@@ -121,14 +128,19 @@ class _ForumScreenState extends State<ForumScreen> {
       User? user = FirebaseAuth.instance.currentUser;
       if (user != null) {
         try {
-          await _firestore.collection('messages').add({
-            'content': messageText,
-            'senderId': user.uid,
-            'senderName': user.displayName ?? 'Unknown',
-            'timestamp': FieldValue.serverTimestamp(),
-            'fileName': fileName,
-            'fileExtension': fileExtension,
-            'filePath': filePath,
+          Reference storageReference = FirebaseStorage.instance.ref().child('files/$fileName');
+          UploadTask uploadTask = storageReference.putFile(File(filePath));
+          await uploadTask.whenComplete(() async {
+            String downloadUrl = await storageReference.getDownloadURL();
+            await _firestore.collection('messages').add({
+              'content': messageText,
+              'senderId': user.uid,
+              'senderName': user.displayName ?? 'Unknown',
+              'timestamp': FieldValue.serverTimestamp(),
+              'fileName': fileName,
+              'fileExtension': fileExtension,
+              'downloadUrl': downloadUrl,
+            });
           });
         } catch (e) {
           print("Error sending message: $e");
@@ -196,37 +208,45 @@ class _ForumScreenState extends State<ForumScreen> {
                             Text(
                               'Sender: ${message.senderName} - ${message.timestamp.toDate()}',
                             ),
-                         if (message.fileName.isNotEmpty)
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('File:'),
-                                if (message.fileExtension.toLowerCase() == 'jpg' ||
-                                    message.fileExtension.toLowerCase() == 'jpeg' ||
-                                    message.fileExtension.toLowerCase() == 'png' ||
-                                    message.fileExtension.toLowerCase() == 'gif' ||
-                                    message.fileExtension.toLowerCase() == 'bmp')
-                                  FutureBuilder(
-                                    future: File(message.filePath).exists(),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.connectionState == ConnectionState.done &&
-                                          snapshot.data == true) {
-                                        return Image.file(
-                                          File(message.filePath),
-                                          width: 200,
-                                          height: 200,
+                            if (message.downloadUrl.isNotEmpty)
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('File:'),
+                                  if (message.fileExtension.toLowerCase() == 'pdf')
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => PDFScreen(
+                                              pdfUrl: message.downloadUrl,
+                                            ),
+                                          ),
                                         );
-                                      } else {
-                                        return Text('Image not found or cannot be loaded.');
-                                      }
-                                    },
-                                  ),
-                                if (message.fileExtension.toLowerCase() == 'pdf')
-                                  Text('PDF File: ${message.fileName}'),
-                                // Add more conditions for other file types
-                              ],
-                            ),
-
+                                      },
+                                      child: Text('View PDF'),
+                                    )
+                                  else
+                                    Image.network(
+                                      message.downloadUrl,
+                                      loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                                        if (loadingProgress == null) {
+                                          return child;
+                                        } else {
+                                          return Center(
+                                            child: CircularProgressIndicator(
+                                              value: loadingProgress.expectedTotalBytes != null
+                                                  ? loadingProgress.cumulativeBytesLoaded / (loadingProgress.expectedTotalBytes ?? 1)
+                                                  : null,
+                                            ),
+                                          );
+                                        }
+                                      },
+                                    ),
+                                  Text('File Name: ${message.fileName}'),
+                                ],
+                              ),
 
                           ],
                         ),
@@ -324,5 +344,38 @@ class _ForumScreenState extends State<ForumScreen> {
         ],
       ),
     );
+  }
+}
+class PDFScreen extends StatelessWidget {
+  final String pdfUrl;
+
+  PDFScreen({required this.pdfUrl});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('PDF Viewer'),
+        backgroundColor: Color.fromARGB(255, 150, 122, 161),
+      ),
+      body: SafeArea(
+        child: _buildPdfViewer(),
+      ),
+    );
+  }
+
+  Widget _buildPdfViewer() {
+    try {
+return SfPdfViewer.network(
+  pdfUrl,
+
+);
+    } catch (e) {
+      print('Error loading PDF: $e');
+      // Handle the error as needed.
+      return Center(
+        child: Text('Error loading PDF'),
+      );
+    }
   }
 }
