@@ -14,13 +14,12 @@ class Question {
 }
 
 class QuizPage extends StatefulWidget {
-
   @override
   _QuizPageState createState() => _QuizPageState();
 }
 
 class _QuizPageState extends State<QuizPage> {
-      Achievement? _achievement;
+  Achievement? _achievement;
 
   int _currentQuestionIndex = 0;
   int _score = 0;
@@ -28,55 +27,55 @@ class _QuizPageState extends State<QuizPage> {
 
   List<Question> _questions = [
     Question(
-      question: 'Because of virtual memory, the memory can be shared among',
+      question:
+          'Which of the following statements best describes a foreign key in a database?',
       options: [
-        'Processes',
-        'Threads',
-        'Instructions',
-        'none of the mentioned'
+        'It is a primary key from another table.',
+        'It is used to establish relationships between tables.',
+        'It is a key that uniquely identifies each record in a table.',
+        ' It is a key that can be null in a table.'
       ],
-      correctAnswer: 'Processes',
+      correctAnswer: 'It is used to establish relationships between tables.',
     ),
     Question(
-      question: 'Which one of the following is not shared by threads?',
+      question:
+          'Which of the following is an advantage of using a relational database management system (RDBMS)?',
       options: [
-        'program counter',
-        'stack',
-        'both program counter and stack',
-        'none of the mentioned'
-      ],
-      correctAnswer: 'both program counter and stack',
-    ),
-    Question(
-      question: 'A process can be',
-      options: [
-        'single threaded',
-        'multithreaded',
-        'both single threaded and multithreaded',
-        'none of the mentioned'
-      ],
-      correctAnswer: 'both single threaded and multithreaded',
-    ),
-    Question(
-      question: 'if one thread opens a file with read privileges then',
-      options: [
-        'other threads in the another process can also read from that file',
-        'other threads in the same process can also read from that file ',
-        'any other thread cannot read from that file',
-        'all of the mentioned'
+        'It requires less storage space compared to other database systems.',
+        'It supports only simple data structures and relationships.',
+        'It allows for faster query processing and data retrieval.',
+        'It does not require any structured query language (SQL) skills.'
       ],
       correctAnswer:
-          'other threads in the same process can also read from that file ',
+          'It allows for faster query processing and data retrieval.',
     ),
     Question(
-      question: 'When the event for which a thread is blocked occurs?',
+      question:
+          'Which of the following normalization forms eliminates redundancy by removing partial dependencies?',
       options: [
-        'thread moves to the ready queue',
-        'thread remains blocked ',
-        'thread completes',
-        'a new thread is provided'
+        'First Normal Form (1NF)',
+        'Second Normal Form (2NF)',
+        'Third Normal Form (3NF)',
+        'Boyce-Codd Normal Form (BCNF)'
       ],
-      correctAnswer: 'thread moves to the ready queue',
+      correctAnswer: 'Third Normal Form (3NF)',
+    ),
+    Question(
+      question:
+          'Which of the following is an example of a non-relational database?',
+      options: ['MySQL', 'Oracle', 'MongoDB', 'PostgreSQL'],
+      correctAnswer: 'MongoDB',
+    ),
+    Question(
+      question: 'What is the purpose of a database index?',
+      options: [
+        'To enforce referential integrity constraints.',
+        'To store large binary objects (BLOBs) in the database.',
+        'To improve query performance by speeding up data retrieval.',
+        'To define the structure and relationships between database tables.'
+      ],
+      correctAnswer:
+          'To improve query performance by speeding up data retrieval.',
     ),
   ];
 
@@ -193,8 +192,6 @@ class _QuizPageState extends State<QuizPage> {
 //       ),
 //     );
   }
-
-
 
   Widget _buildResultPage() {
     return Center(

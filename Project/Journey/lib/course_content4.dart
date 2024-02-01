@@ -4,8 +4,11 @@ import 'package:Journey/sentimentanalysis.dart';
 import 'package:Journey/videoplayer4.dart';
 import 'package:flutter/material.dart'; 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:Journey/QuizApp.dart';
+
 import 'package:Journey/sweAssignment.dart';
+
+import 'package:Journey/QuizS.dart';
+
 
 class CourseContentScreen4 extends StatelessWidget {
   const CourseContentScreen4({Key? key}) : super(key: key);
@@ -28,8 +31,8 @@ class CourseContentScreen4 extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _buildBox(context, "Videos", Color.fromARGB(255, 117, 166, 144), course: "java"),
-                  _buildBox(context, "Quizzes", Color.fromARGB(255, 249, 197, 83), course: "java"),
+                  _buildBox(context, "Videos", Color.fromARGB(255, 117, 166, 144), course: "Software engineering"),
+                  _buildBox(context, "Quizzes", Color.fromARGB(255, 249, 197, 83), course: "Software engineering"),
                 ],
               ),
               const SizedBox(height: 16),
@@ -56,9 +59,9 @@ class CourseContentScreen4 extends StatelessWidget {
       case "Videos":
         screenToNavigate = VideoListScreen4();
         break;
-      // case "Quizzes":
-      // screenToNavigate = QuizPage();
-      // break;
+      case "Quizzes":
+      screenToNavigate = QuizPage();
+      break;
     case "Articles":
       screenToNavigate = ArticleList();
       break;
