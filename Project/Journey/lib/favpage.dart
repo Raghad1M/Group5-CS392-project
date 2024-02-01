@@ -59,7 +59,7 @@ class _FavoritePageState extends State<FavoritePage> with SingleTickerProviderSt
       appBar: AppBar(
         title: Text('Favorites'),
         backgroundColor: Color.fromARGB(255, 150, 122, 161),
-              automaticallyImplyLeading: false,
+        automaticallyImplyLeading: false,
         bottom: TabBar(
           controller: _tabController,
           tabs: [
@@ -70,17 +70,12 @@ class _FavoritePageState extends State<FavoritePage> with SingleTickerProviderSt
           ],
         ),
         actions: [
-//           IconButton(
-//             icon: Icon(Icons.notifications),
-//             onPressed: () {
-//               Navigator.push(
-//   context,
-//   MaterialPageRoute(
-//     builder: (context) => NotificationPage(achievement: myAchievement),
-//   ),
-// );
-//             },
-//           ),
+          IconButton(
+            icon: Icon(Icons.notifications),
+            onPressed: () {
+              // Navigate to notification page
+            },
+          ),
         ],
       ),
       body: Column(
