@@ -13,14 +13,13 @@ class Question {
   });
 }
 
-class QuizPage extends StatefulWidget {
-
+class QuizPage1 extends StatefulWidget {
   @override
   _QuizPageState createState() => _QuizPageState();
 }
 
-class _QuizPageState extends State<QuizPage> {
-      Achievement? _achievement;
+class _QuizPageState extends State<QuizPage1> {
+  Achievement? _achievement;
 
   int _currentQuestionIndex = 0;
   int _score = 0;
@@ -28,55 +27,55 @@ class _QuizPageState extends State<QuizPage> {
 
   List<Question> _questions = [
     Question(
-      question: 'Because of virtual memory, the memory can be shared among',
+      question: '.......... begins and ends the body of every method and class',
       options: [
-        'Processes',
-        'Threads',
-        'Instructions',
-        'none of the mentioned'
+        'Parentheses()',
+        'Square brackets[]',
+        'Semiconlon ;',
+        'Curly braces {}'
       ],
-      correctAnswer: 'Processes',
+      correctAnswer: 'Curly braces {}',
     ),
     Question(
-      question: 'Which one of the following is not shared by threads?',
+      question: 'Begins an end-of-line comment',
       options: [
-        'program counter',
-        'stack',
-        'both program counter and stack',
-        'none of the mentioned'
+        '/* */',
+        '//',
+        '// //',
+        '/*'
       ],
-      correctAnswer: 'both program counter and stack',
+      correctAnswer: '/* */',
     ),
     Question(
-      question: 'A process can be',
+      question: 'Every java program must start with',
       options: [
-        'single threaded',
-        'multithreaded',
-        'both single threaded and multithreaded',
-        'none of the mentioned'
+        'variable',
+        'print statement',
+        'comment',
+        'class'
       ],
-      correctAnswer: 'both single threaded and multithreaded',
+      correctAnswer: 'class',
     ),
     Question(
-      question: 'if one thread opens a file with read privileges then',
+      question: 'Used to store data of the program',
       options: [
-        'other threads in the another process can also read from that file',
-        'other threads in the same process can also read from that file ',
-        'any other thread cannot read from that file',
-        'all of the mentioned'
+        'variable',
+        'print statement',
+        'comment',
+        'class'
       ],
       correctAnswer:
-          'other threads in the same process can also read from that file ',
+          'variable',
     ),
     Question(
-      question: 'When the event for which a thread is blocked occurs?',
+      question: 'Its a Java reserved word used to declare constants:',
       options: [
-        'thread moves to the ready queue',
-        'thread remains blocked ',
-        'thread completes',
-        'a new thread is provided'
+        'int',
+        'static',
+        'Final',
+        'final'
       ],
-      correctAnswer: 'thread moves to the ready queue',
+      correctAnswer: 'int',
     ),
   ];
 
@@ -193,8 +192,6 @@ class _QuizPageState extends State<QuizPage> {
 //       ),
 //     );
   }
-
-
 
   Widget _buildResultPage() {
     return Center(

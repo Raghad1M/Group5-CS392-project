@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
+class Achievement {
+  final String title;
+  final String description;
+  final String imagePath;
+
+  Achievement({
+    required this.title,
+    required this.description,
+    required this.imagePath,
+  });
+}
 
 class NotificationPage extends StatelessWidget {
-  static const platform = MethodChannel('your_channel_name');
+  final Achievement? achievement;
 
-  Future<void> showNotification() async {
-    try {
-      await platform.invokeMethod('showNotification', {
-        'title': 'New Notification',
-        'body': 'You have a new notification!',
-      });
-    } on PlatformException catch (e) {
-      print('Failed to show notification: ${e.message}');
-    }
-  }
+  NotificationPage({this.achievement});
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +24,28 @@ class NotificationPage extends StatelessWidget {
         title: Text('Notification Page'),
       ),
       body: Center(
-        child: ElevatedButton(
-          onPressed: showNotification,
-          child: Text('Show Notification'),
-        ),
+        child: achievement != null
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    achievement!.imagePath,
+                    width: 150,
+                    height: 150,
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    achievement!.title,
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    achievement!.description,
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ],
+              )
+            : Text('No achievements to display.'),
       ),
     );
   }

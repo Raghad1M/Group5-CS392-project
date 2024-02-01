@@ -1,6 +1,7 @@
 import 'package:Journey/NotificationPage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:Journey/QuizApp.dart';
 
 class FavoritePage extends StatefulWidget {
   @override
@@ -69,17 +70,17 @@ class _FavoritePageState extends State<FavoritePage> with SingleTickerProviderSt
           ],
         ),
         actions: [
-          IconButton(
-            icon: Icon(Icons.notifications),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (BuildContext context) => NotificationPage(),
-                ),
-              );
-            },
-          ),
+//           IconButton(
+//             icon: Icon(Icons.notifications),
+//             onPressed: () {
+//               Navigator.push(
+//   context,
+//   MaterialPageRoute(
+//     builder: (context) => NotificationPage(achievement: myAchievement),
+//   ),
+// );
+//             },
+//           ),
         ],
       ),
       body: Column(

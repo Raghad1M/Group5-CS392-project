@@ -28,55 +28,55 @@ class _QuizPageState extends State<QuizPage> {
 
   List<Question> _questions = [
     Question(
-      question: 'Because of virtual memory, the memory can be shared among',
+      question: 'Which model is not an agile development method',
       options: [
-        'Processes',
-        'Threads',
-        'Instructions',
-        'none of the mentioned'
+        'Scrum',
+        'Extreme Programming(XP)',
+        'Waterfall',
+        'Kanban'
       ],
-      correctAnswer: 'Processes',
+      correctAnswer: 'Waterfall',
     ),
     Question(
-      question: 'Which one of the following is not shared by threads?',
+      question: 'RUP stands for:',
       options: [
-        'program counter',
-        'stack',
-        'both program counter and stack',
-        'none of the mentioned'
+        'Rational Undefined Process',
+        'Rational Unfined Process',
+        'Record Unit Point',
+        'Rational Unit Process'
       ],
-      correctAnswer: 'both program counter and stack',
+      correctAnswer: 'Rational Unfined Process',
     ),
     Question(
-      question: 'A process can be',
+      question: 'The difficulty of accommodating change is a disadvantage of:',
       options: [
-        'single threaded',
-        'multithreaded',
-        'both single threaded and multithreaded',
-        'none of the mentioned'
+        'Incremental development',
+        'Waterfall model',
+        'Reuse oriented model',
+        'Agile models'
       ],
-      correctAnswer: 'both single threaded and multithreaded',
+      correctAnswer: 'Waterfall model',
     ),
     Question(
-      question: 'if one thread opens a file with read privileges then',
+      question: 'Risks are explicitly assessed and resolved throughout the process',
       options: [
-        'other threads in the another process can also read from that file',
-        'other threads in the same process can also read from that file ',
-        'any other thread cannot read from that file',
-        'all of the mentioned'
+        'Waterfall',
+        'Extreme Programming (XP)',
+        'Boehms spiral model',
+        'RUP'
       ],
       correctAnswer:
-          'other threads in the same process can also read from that file ',
+          'Boehms spiral model',
     ),
     Question(
-      question: 'When the event for which a thread is blocked occurs?',
+      question: 'pair programming is on of its main features?',
       options: [
-        'thread moves to the ready queue',
-        'thread remains blocked ',
-        'thread completes',
-        'a new thread is provided'
+        'Waterfall',
+        'Extreme Programming (XP)',
+        'Boehms spiral model',
+        'RUP'
       ],
-      correctAnswer: 'thread moves to the ready queue',
+      correctAnswer: 'Extreme Programming (XP)',
     ),
   ];
 

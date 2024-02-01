@@ -5,7 +5,7 @@ import 'package:Journey/sentimentanalysis.dart';
 import 'package:Journey/videoplayer3.dart';
 import 'package:flutter/material.dart'; 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:Journey/QuizApp.dart';
+import 'package:Journey/Quizjave.dart';
 
 class CourseContentScreen2 extends StatelessWidget {
   const CourseContentScreen2({Key? key}) : super(key: key);
@@ -56,9 +56,9 @@ class CourseContentScreen2 extends StatelessWidget {
       case "Videos":
         screenToNavigate = VideoListScreen();
         break;
-    // case "Quizzes":
-    //   screenToNavigate = QuizPage();
-    //   break;
+    case "Quizzes":
+      screenToNavigate = QuizPage1();
+      break;
     case "Articles":
       screenToNavigate = ArticleList();
       break;
