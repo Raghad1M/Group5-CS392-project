@@ -56,52 +56,61 @@ class _VideoListScreenState3 extends State<VideoListScreen3> {
     );
   }
 
-  Widget _buildSearchResults() {
-    final String query = _searchController.text.toLowerCase();
+Widget _buildSearchResults() {
+  final String query = _searchController.text.toLowerCase();
 
-    return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-      stream: firestore.collection('database_videos').snapshots(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
-        } else if (snapshot.data == null || snapshot.data!.docs.isEmpty) {
-          return Center(child: Text('No videos found.'));
-        } else {
-          return ListView.builder(
-            itemCount: snapshot.data!.docs.length,
-            itemBuilder: (context, index) {
-              var video = snapshot.data!.docs[index].data() as Map<String, dynamic>;
+  return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+    stream: firestore.collection('database_videos').snapshots(),
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return Center(child: CircularProgressIndicator());
+      } else if (snapshot.hasError) {
+        return Center(child: Text('Error: ${snapshot.error}'));
+      } else if (snapshot.data == null || snapshot.data!.docs.isEmpty) {
+        return Center(child: Text('No videos found.'));
+      } else {
+        // Filter videos based on the search query
+        final filteredVideos = snapshot.data!.docs
+            .where((doc) => doc['title'].toLowerCase().contains(query))
+            .toList();
+
+        return ListView.builder(
+          itemCount: filteredVideos.length,
+          itemBuilder: (context, index) {
+            var video = filteredVideos[index].data() as Map<String, dynamic>;
               String type = 'video';
-
-              return ListTile(
-                title: Text(video['title']),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Sentiment Score: ${video['sentimentScore']}'),
-                    SizedBox(height: 4),
-                    if (video['thumbnailUrl'] != null &&
-                        video['thumbnailUrl'].isNotEmpty)
-                      Image.network(video['thumbnailUrl'],
-                          height: 80, width: 120),
-                  ],
+            return Column(
+              children: [
+                ListTile(
+                  title: Text(video['title']),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Sentiment Score: ${video['sentimentScore']}'),
+                      SizedBox(height: 4),
+                      if (video['thumbnailUrl'] != null &&
+                          video['thumbnailUrl'].isNotEmpty)
+                        Image.network(video['thumbnailUrl'],
+                            height: 80, width: 120),
+                    ],
+                  ),
+                  trailing: _FavoriteButton(
+                    type: type, // You need to define 'type' variable here
+                    title: video['title'] ?? '',
+                    url: video['videoId'] ?? '',
+                    isVideoInFavorites: isVideoInFavorites,
+                    addVideoToFavorites: addVideoToFavorites,
+                  ),
                 ),
-                trailing: _FavoriteButton(
-                  type: type,
-                  title: video['title'] ?? '',
-                  url: video['videoId'] ?? '',
-                  isVideoInFavorites: isVideoInFavorites,
-                  addVideoToFavorites: addVideoToFavorites,
-                ),
-              );
-            },
-          );
-        }
-      },
-    );
-  }
+                Divider(), // Add a divider between items if needed
+              ],
+            );
+          },
+        );
+      }
+    },
+  );
+}
 
   Future<bool> isVideoInFavorites(String type, String title, String url) async {
     try {

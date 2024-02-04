@@ -29,23 +29,23 @@ class _Guesthome extends State<Guesthome> {
   List<Course> courses = [
     Course(
       name: 'Operating system',
-      university: 'Imamu',
-      image: 'images/Ppic.png',
+      university: 'IMISU',
+      image: 'images/ossoso.jpg',
     ),
     Course(
       name: 'Java 1',
-      university: 'Imamu',
-      image: 'images/Ppic.png',
+      university: 'IMISU',
+      image: 'images/javajvajva.png',
     ),
     Course(
       name: 'Database',
-      university: 'Imamu',
-      image: 'images/Ppic.png',
+      university: 'IMISU',
+      image: 'images/datdatdtdat.png',
     ),
     Course(
       name: 'Software engineering',
-      university: 'Imamu',
-      image: 'images/Ppic.png',
+      university: 'IMISU',
+      image: 'images/swee.png',
     ),
   ];
   List<Course> filteredCourses = [];
@@ -92,10 +92,22 @@ class _Guesthome extends State<Guesthome> {
   Widget _buildHomePage() {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home page'),
-        foregroundColor: const Color.fromARGB(255, 245, 230, 232),
+        title: Text('Home'),
         automaticallyImplyLeading: false,
         backgroundColor: Color.fromARGB(255, 150, 122, 161),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.notifications),
+            onPressed: () {
+Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>pop(),
+                              ),
+                        );          
+                        },
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -115,41 +127,78 @@ class _Guesthome extends State<Guesthome> {
               itemCount: filteredCourses.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
+                childAspectRatio: 1.2,  // Adjusted aspect ratio
               ),
               itemBuilder: (context, index) {
-                return Card(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        filteredCourses[index].name,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontFamily: 'Poppins',
+                return GestureDetector(
+                  onTap: () {
+                    switch (filteredCourses[index].name) {
+                      case 'Operating system':
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => pop()),
+                        );
+                        break;
+                      case 'Java 1':
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => pop()),
+                        );
+                        break;
+                      case 'Database':
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => pop()),
+                        );
+                        break;
+                      case 'Software engineering':
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => pop()),
+                        );
+                        break;
+                      default:
+                    }
+                  },
+                  child: Card(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          filteredCourses[index].name,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontFamily: 'Poppins',
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 8),
-                      Image.asset(
-                        filteredCourses[index].image,
-                        width: 80,
-                        height: 80,
-                      ),
-                      SizedBox(height: 8),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.school_rounded,
-                            color: Color.fromARGB(255, 150, 122, 161),
-                          ),
-                          SizedBox(width: 4),
-                          Text(
-                            filteredCourses[index].university,
-                            style: TextStyle(fontSize: 16),
-                          ),
-                        ],
-                      ),
-                    ],
+                        SizedBox(height: 4),
+                        Image.asset(
+                          filteredCourses[index].image,
+                          width: 100,
+                          height: 60,
+                        ),
+                        SizedBox(height: 4),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.school_rounded,
+                              color: Color.fromARGB(255, 150, 122, 161),
+                              size: 16,
+                            ),
+                            SizedBox(width: 2),
+                            Text(
+                              filteredCourses[index].university,
+                              style: TextStyle(fontSize: 14),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },
@@ -157,8 +206,7 @@ class _Guesthome extends State<Guesthome> {
           ),
         ],
       ),
-    );
-  }
+);  }
 
   @override
   Widget build(BuildContext context) {
@@ -202,25 +250,27 @@ class _Guesthome extends State<Guesthome> {
 class pop extends StatelessWidget {
   const pop({Key? key});
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Column(
-          children: [
-            SizedBox(height: 300,),
-            Text(
-              'YOU HAVE TO LOGIN OR SIGN UP!',
-              style: TextStyle(
-                fontSize: 23,
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w500,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'YOU HAVE TO LOGIN OR SIGN UP!',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+         color: Color.fromARGB(255, 150, 122, 161),
+                ),
+                textAlign: TextAlign.center,
               ),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            ElevatedButton(
+              SizedBox(height: 20),
+              ElevatedButton(
               onPressed: () {
                 PageController controllerInstance = PageController();
 
@@ -234,20 +284,22 @@ class pop extends StatelessWidget {
                   ),
                 );
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color.fromARGB(255, 150, 122, 161),
-                foregroundColor: const Color.fromARGB(255, 245, 230, 232),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 130,
-                  vertical: 15,
+                style: ElevatedButton.styleFrom(
+         backgroundColor: Color.fromARGB(255, 150, 122, 161),
+                  onPrimary: Colors.white,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 15,
+                  ),
                 ),
+                child: Text('Sign In'),
               ),
-              child: const Text('Sign in'),
-            ),
-          ],
+              SizedBox(height: 10),
+
+            ],
+          ),
         ),
       ),
     );
   }
-
 }

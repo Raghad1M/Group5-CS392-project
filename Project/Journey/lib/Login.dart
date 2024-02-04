@@ -29,22 +29,33 @@ Future<void> _login(BuildContext context) async {
       );
     }
   } on FirebaseAuthException catch (e) {
-    String errorMessage = 'Error signing in';
+    String errorMessage = '';
 
-    if (e.code == 'invalid-email') {
-      errorMessage = 'Invalid email format';
-    } else if (e.code == 'invalid-credential' || e.code == 'wrong-password') {
-      errorMessage = 'Invalid email or password';
-    } else {
-      errorMessage = 'Something went wrong';
+    switch (e.code) {
+      case 'invalid-email':
+        errorMessage = 'Invalid email format';
+        break;
+      case 'user-not-found':
+        errorMessage = 'No account found with this email';
+        break;
+      case  'invalid-credential':
+        errorMessage = 'Incorrect email or password';
+        break;
+      default:
+        errorMessage = 'Error signing in';
+        break;
     }
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(errorMessage),
-        duration: Duration(seconds: 4), 
+        duration: Duration(seconds: 4),
       ),
     );
+
+    setState(() {
+      _errorMessage = errorMessage;
+    });
   } catch (e) {
     print('Error signing in: $e');
   }

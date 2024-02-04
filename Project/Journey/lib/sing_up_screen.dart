@@ -24,30 +24,30 @@ Future<void> _createAccount() async {
   RegExp digitRegExp = RegExp(r'\d');
   RegExp specialCharRegExp = RegExp(r'[\W_]');
 
-  if (!uppercaseRegExp.hasMatch(_passController.text)) {
-    showSnackbar('Password must contain at least one uppercase letter.');
+  if (!uppercaseRegExp.hasMatch(_passController.text)|| !lowercaseRegExp.hasMatch(_passController.text) || !digitRegExp.hasMatch(_passController.text)||!specialCharRegExp.hasMatch(_passController.text)||_passController.text.length < 8) {
+    showSnackbar('Password must be 8+ characters, and must contain AT LEAST one uppercase letter, one lowercase letter,  one digit, and one special character');
     return;
   }
 
-  if (!lowercaseRegExp.hasMatch(_passController.text)) {
-    showSnackbar('Password must contain at least one lowercase letter.');
-    return;
-  }
+  // if (!lowercaseRegExp.hasMatch(_passController.text)) {
+  //   showSnackbar('Password must contain at least one lowercase letter.');
+  //   return;
+  // }
 
-  if (!digitRegExp.hasMatch(_passController.text)) {
-    showSnackbar('Password must contain at least one digit.');
-    return;
-  }
+  // if (!digitRegExp.hasMatch(_passController.text)) {
+  //   showSnackbar('Password must contain at least one digit.');
+  //   return;
+  // }
 
-  if (!specialCharRegExp.hasMatch(_passController.text)) {
-    showSnackbar('Password must contain at least one special character.');
-    return;
-  }
+  // if (!specialCharRegExp.hasMatch(_passController.text)) {
+  //   showSnackbar('Password must contain at least one special character.');
+  //   return;
+  // }
 
-  if (_passController.text.length < 8) {
-    showSnackbar('Password must be 8 characters or longer.');
-    return;
-  }
+  // if (_passController.text.length < 8) {
+  //   showSnackbar('Password must be 8 characters or longer.');
+  //   return;
+  // }
 
   try {
     UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -92,7 +92,7 @@ Future<void> _createAccount() async {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        duration: Duration(seconds: 5),
+        duration: Duration(seconds: 6),
       ),
     );
   }
